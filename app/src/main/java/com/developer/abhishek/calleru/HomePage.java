@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.developer.abhishek.calleru.fragments.ContactScreen;
 import com.developer.abhishek.calleru.fragments.DiallingScreen;
 
 import butterknife.BindView;
@@ -101,6 +102,15 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                     break;
 
                 case R.id.bottomNavContacts:
+                    // Resetting DialPad Screen
+                    isToDial = false;
+                    isToShowDialPad = false;
+                    dialledNumber = null;
+
+                    ContactScreen contactScreen = new ContactScreen();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.contentFLAtHP,contactScreen).commit();
+
+                    break;
 
                 case R.id.bottomNavSearch:
             }

@@ -69,6 +69,7 @@ public class DiallingScreen extends Fragment {
         isToShowDialPad = toShowDialPad;
     }
 
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

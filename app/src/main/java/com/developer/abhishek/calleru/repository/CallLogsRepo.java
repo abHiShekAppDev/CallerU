@@ -126,6 +126,12 @@ public class CallLogsRepo {
                         callLogsList.remove(callLogsList.size() - 1);
                     }
                 }
+            }else{
+                if(previousCallNumber.substring(previousCallNumber.length()).equalsIgnoreCase(callNumber.substring(callNumber.length()))) {
+                    if (callType.equalsIgnoreCase(callLogsList.get(callLogsList.size() - 1).getCallType())) {
+                        callLogsList.remove(callLogsList.size() - 1);
+                    }
+                }
             }
         }
     }
