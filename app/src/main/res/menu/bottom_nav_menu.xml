@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bottomNavDial"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Dial"/>
+
+    <item
+        android:id="@+id/bottomNavContacts"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Contact"/>
+
+    <item
+        android:id="@+id/bottomNavSearch"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Search"/>
+</menu>
