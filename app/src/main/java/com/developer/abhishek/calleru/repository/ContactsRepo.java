@@ -22,10 +22,14 @@ public class ContactsRepo {
     private final String TAG_NAME = "Name : ";
 
     private MutableLiveData<List<Contacts>> contactsMutableLiveData = new MutableLiveData<>();
-    private List<Contacts> contactsList = new ArrayList<>();
+    private MutableLiveData<ArrayList<String>> allContactsMutableLiveData = new MutableLiveData<>();
 
-    public MutableLiveData<List<Contacts>> getAllContacts(Context context) {
+    private HashMap<String,String> allContactsHM = new HashMap<>();
 
+    private List<Contacts> contactWithoutRep = new ArrayList<>();
+    private ArrayList<String> allContactList = new ArrayList<>();
+
+    public ContactsRepo(Context context) {
         ContentResolver contentResolver = context.getContentResolver();
         Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
 
@@ -34,7 +38,6 @@ public class ContactsRepo {
                 String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
                 String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 
-                HashMap<String,String> numberHashMap = new HashMap<>();
                 if (cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
                     Cursor contactCursor = contentResolver.query(
                             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
@@ -44,47 +47,56 @@ public class ContactsRepo {
                     while (contactCursor.moveToNext()) {
                         String phoneNo = contactCursor.getString(contactCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 
-                        //  Converting all contact number to format +91 XXXXXXXXXX to remove duplication
+                        //  Converting all contact number to format +91XXXXXXXXXX to remove duplication
                         if(phoneNo.length() == 10){
-                            phoneNo = "+91 " + phoneNo;
+                            phoneNo = "+91"+phoneNo;
+                        }else if(phoneNo.length() == 11){
+                            phoneNo = "+91"+phoneNo.substring(0,5)+phoneNo.substring(6);
+                        }else if(phoneNo.length() == 14){
+                            phoneNo = "+91"+phoneNo.substring(4);
+                        }else if(phoneNo.length() == 15){
+                            phoneNo = "+91"+phoneNo.substring(4,9)+phoneNo.substring(10);
                         }
-
                         //  Setting contact number as key that will remove duplicate number
-                        numberHashMap.put(phoneNo,name);
-
-                        Log.i(TAG_NAME,name);
-                        Log.i(TAG_PHONE, phoneNo);
+                        allContactsHM.put(phoneNo,name);
                     }
                     contactCursor.close();
                 }
-                addContactToList(numberHashMap);
             }
         }
         if(cursor != null){
             cursor.close();
         }
-
-        sortListBasedOnAlphabet();
-        contactsMutableLiveData.setValue(contactsList);
-        return contactsMutableLiveData;
     }
 
-    private void addContactToList(HashMap<String,String> numberNameHM){
-
+    public MutableLiveData<List<Contacts>> getContactsWithoutRepetation() {
         HashMap<String,String> nameNumberHM = new HashMap<>();
-        for(Map.Entry entry:numberNameHM.entrySet()){
+        for(Map.Entry entry: allContactsHM.entrySet()){
             nameNumberHM.put(String.valueOf(entry.getValue()),String.valueOf(entry.getKey()));
         }
 
-        //  Finally adding all contacts to list
         for(Map.Entry<String,String> entry:nameNumberHM.entrySet()){
-            contactsList.add(new Contacts(String.valueOf(entry.getKey()),String.valueOf(entry.getValue())));
+            contactWithoutRep.add(new Contacts(String.valueOf(entry.getKey()),String.valueOf(entry.getValue())));
         }
+
+        sortListBasedOnAlphabet(contactWithoutRep);
+        contactsMutableLiveData.setValue(contactWithoutRep);
+        return contactsMutableLiveData;
     }
 
-    private void sortListBasedOnAlphabet(){
-        if (contactsList.size() > 0) {
-            Collections.sort(contactsList, new Comparator<Contacts>() {
+    public MutableLiveData<ArrayList<String>> getAllContacts() {
+        for(Map.Entry<String,String> entry: allContactsHM.entrySet()){
+            allContactList.add(String.valueOf(entry.getKey()));
+        }
+
+        allContactsMutableLiveData.setValue(allContactList);
+        return allContactsMutableLiveData;
+    }
+
+
+    private void sortListBasedOnAlphabet(List<Contacts> list){
+        if (list.size() > 0) {
+            Collections.sort(list, new Comparator<Contacts>() {
                 @Override
                 public int compare(final Contacts object1, final Contacts object2) {
                     return object1.getName().compareTo(object2.getName());

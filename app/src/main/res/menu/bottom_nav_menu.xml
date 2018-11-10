@@ -15,4 +15,9 @@
         android:id="@+id/bottomNavSearch"
         android:icon="@mipmap/ic_launcher"
         android:title="Search"/>
+
+    <item
+        android:id="@+id/bottomNavUpdate"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Update"/>
 </menu>

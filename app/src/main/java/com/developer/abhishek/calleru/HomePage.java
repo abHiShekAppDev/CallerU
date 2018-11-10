@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.developer.abhishek.calleru.fragments.ContactScreen;
 import com.developer.abhishek.calleru.fragments.DiallingScreen;
+import com.developer.abhishek.calleru.fragments.UpdateScreen;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -98,7 +99,6 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                         diallingScreen.setToShowDialPad(isToShowDialPad);
                         getSupportFragmentManager().beginTransaction().replace(R.id.contentFLAtHP,diallingScreen).commit();
                     }
-
                     break;
 
                 case R.id.bottomNavContacts:
@@ -109,10 +109,18 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
 
                     ContactScreen contactScreen = new ContactScreen();
                     getSupportFragmentManager().beginTransaction().replace(R.id.contentFLAtHP,contactScreen).commit();
-
                     break;
 
-                case R.id.bottomNavSearch:
+                case R.id.bottomNavUpdate:
+                    // Resetting DialPad Screen
+                    isToDial = false;
+                    isToShowDialPad = false;
+                    dialledNumber = null;
+
+                    getSupportFragmentManager().beginTransaction().replace(R.id.contentFLAtHP,new UpdateScreen()).commit();
+                    break;
+
+
             }
             return true;
         }

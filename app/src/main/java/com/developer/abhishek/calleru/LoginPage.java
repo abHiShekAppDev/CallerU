@@ -82,8 +82,8 @@ public class LoginPage extends AppCompatActivity {
                 verificationCallBacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                     @Override
                     public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-                       // startActivity(new Intent(LoginPage.this,HomePage.class));
-                       // finish();
+                       startActivity(new Intent(LoginPage.this,HomePage.class));
+                       finish();
                     }
 
                     @Override
@@ -142,8 +142,11 @@ public class LoginPage extends AppCompatActivity {
             currentStep++;
             name = nameEt.getText().toString().trim();
             if(name != null){
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("USERS");
-                databaseReference.child(mobileNumber).child("NAME").setValue(name);
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("USERS").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+                databaseReference.child("Name").setValue(name);
+                databaseReference.child("MobileNumber").setValue(mobileNumber);
+                databaseReference.child("Id").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
                 startActivity(new Intent(LoginPage.this,HomePage.class));
                 finish();
