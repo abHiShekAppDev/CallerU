@@ -20,4 +20,9 @@
         android:id="@+id/bottomNavUpdate"
         android:icon="@mipmap/ic_launcher"
         android:title="Update"/>
+
+    <item
+        android:id="@+id/bottomNavNotification"
+        android:icon="@mipmap/ic_launcher"
+        android:title="Notification"/>
 </menu>

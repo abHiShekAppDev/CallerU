@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.developer.abhishek.calleru.fragments.ContactScreen;
 import com.developer.abhishek.calleru.fragments.DiallingScreen;
+import com.developer.abhishek.calleru.fragments.NotificationScreen;
 import com.developer.abhishek.calleru.fragments.SearchScreen;
 import com.developer.abhishek.calleru.fragments.UpdateScreen;
 
@@ -127,6 +128,15 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                     dialledNumber = null;
 
                     getSupportFragmentManager().beginTransaction().replace(R.id.contentFLAtHP,new UpdateScreen()).commit();
+                    break;
+
+                case R.id.bottomNavNotification:
+                    // Resetting DialPad Screen
+                    isToDial = false;
+                    isToShowDialPad = false;
+                    dialledNumber = null;
+
+                    getSupportFragmentManager().beginTransaction().replace(R.id.contentFLAtHP,new NotificationScreen()).commit();
                     break;
 
 
