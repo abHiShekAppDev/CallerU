@@ -76,7 +76,6 @@ public class NotifyIntentService extends IntentService {
             if (dataSnapshot.exists()) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Users user = snapshot.getValue(Users.class);
-                    Log.i("FIND ",user.getMobileNumber());
                     sendNotification(user.getMobileNumber());
                 }
             }
