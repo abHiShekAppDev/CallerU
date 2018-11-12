@@ -36,7 +36,7 @@ public class NotifyIntentService extends IntentService {
     private int mainThreadTaskCount = 0;
     private int backgroundTaskCount = 0;
 
-    private String oneSignalAuthkey;
+    private String oneSignalAppId;
     private String oneSignalApiKey;
 
     private ArrayList<String> allContacts;
@@ -53,12 +53,12 @@ public class NotifyIntentService extends IntentService {
             allContacts = intent.getStringArrayListExtra(ALL_CONTACT_PASS_INTENT);
 
             oneSignalApiKey = getApplicationContext().getResources().getString(R.string.oneSignalApiKey);
-            oneSignalAuthkey = getApplicationContext().getResources().getString(R.string.oneSignalAuthKey);
+            oneSignalAppId = getApplicationContext().getResources().getString(R.string.oneSignalAppId);
 
             String action = intent.getAction();
             if (ACTION_NOTIFY_OTHER_USER.equals(action)) {
                 if(newNumber != null && !newNumber.isEmpty() && currentNumber != null && allContacts != null && allContacts.size() > 0){
-                    if(oneSignalAuthkey != null || oneSignalApiKey != null){
+                    if(oneSignalAppId != null || oneSignalApiKey != null){
                         NotificationUtils.showUpdatingNotification(getApplicationContext());
                         findMyActiveContacts();
                     }
@@ -125,7 +125,7 @@ public class NotifyIntentService extends IntentService {
                 httpURLConnection.setRequestMethod("POST");
 
                 String strJsonBody = "{"
-                        + "\"app_id\": \""+oneSignalAuthkey+"\","
+                        + "\"app_id\": \""+ oneSignalAppId +"\","
 
                         + "\"filters\": [{\"field\": \"tag\", \"key\": \"User_ID\", \"relation\": \"=\", \"value\": \"" + userTag + "\"}],"
 

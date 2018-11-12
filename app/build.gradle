@@ -23,6 +23,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         manifestPlaceholders = [
@@ -34,6 +35,16 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions "default"
+    productFlavors {
+        free {
+            applicationId "com.developer.abhishek.calleru.free"
+        }
+        paid {
+            applicationId "com.developer.abhishek.calleru.paid"
         }
     }
 }
@@ -68,6 +79,9 @@ dependencies {
     //  oneSignal
     implementation 'com.onesignal:OneSignal:[3.9.1, 3.99.99]'
     implementation 'com.google.android.gms:play-services-gcm:10.2.4'
+
+    //  Google ad
+    freeImplementation 'com.google.android.gms:play-services-ads:15.0.1'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

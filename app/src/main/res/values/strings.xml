@@ -4,7 +4,7 @@
 
     <!-- Place the OneSignal Api key and Auth key -->
     <string name="oneSignalApiKey"></string>
-    <string name="oneSignalAuthKey"></string>
+    <string name="oneSignalAppId"></string>
 
     <!-- Login Page String -->
     <string name="enterNumber">Enter Your Mobile Number</string>
