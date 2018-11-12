@@ -7,20 +7,12 @@
     android:orientation="vertical"
     tools:context=".HomePage">
 
-    <android.support.design.widget.AppBarLayout
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbarAtHP"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbarAtHP"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    </android.support.design.widget.AppBarLayout>
-
+        android:layout_height="?attr/actionBarSize"
+        android:background="@drawable/toolbar_gradient_background"
+        app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     <FrameLayout
         android:id="@+id/contentFLAtHP"
@@ -32,5 +24,9 @@
         android:id="@+id/bottomNavViewAtHP"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:menu="@menu/bottom_nav_menu"/>
+        app:menu="@menu/bottom_nav_menu"
+        app:itemTextColor="@color/colorPrimary"
+        app:itemIconTint="@color/colorPrimaryDark"
+        app:elevation="@dimen/x8"
+        app:itemBackground="@color/white" />
 </LinearLayout>

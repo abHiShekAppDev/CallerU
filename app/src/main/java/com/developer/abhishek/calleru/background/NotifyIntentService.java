@@ -4,9 +4,10 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.developer.abhishek.calleru.models.Users;
+import com.developer.abhishek.calleru.utils.NotificationUtils;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,13 +27,13 @@ public class NotifyIntentService extends IntentService {
     public static final String ACTION_NOTIFY_OTHER_USER = "com.developer.abhishek.calleru.background.action.notify_other_user";
 
     public static final String NEW_NUMBER_PASS_INTENT = "new_number";
-    public static final String ALT_NUMBER_PASS_INTENT = "alt_number";
     public static final String CURRENT_NUMBER_PASS_INTENT = "current_number";
     public static final String ALL_CONTACT_PASS_INTENT = "all_contact_list";
 
     private String newNumber;
-    private String altNumber;
     private String currentNumber;
+    private int count = 0;
+    private int backCount = 0;
 
     private ArrayList<String> allContacts;
 
@@ -46,13 +47,13 @@ public class NotifyIntentService extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
         if (intent != null) {
             newNumber = intent.getStringExtra(NEW_NUMBER_PASS_INTENT);
-            altNumber = intent.getStringExtra(ALT_NUMBER_PASS_INTENT);
             currentNumber = intent.getStringExtra(CURRENT_NUMBER_PASS_INTENT);
             allContacts = intent.getStringArrayListExtra(ALL_CONTACT_PASS_INTENT);
 
             action = intent.getAction();
             if (ACTION_NOTIFY_OTHER_USER.equals(action)) {
                 if(newNumber != null && !newNumber.isEmpty() && currentNumber != null && allContacts != null && allContacts.size() > 0){
+                    NotificationUtils.showUpdatingNotification(getApplicationContext());
                     findMyActiveContacts();
                 }
             }
@@ -68,6 +69,8 @@ public class NotifyIntentService extends IntentService {
                 query.addValueEventListener(valueEventListener);
             }
         }
+
+        FirebaseDatabase.getInstance().getReference("USERS").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("MobileNumber").setValue("+91"+newNumber);
     }
 
     ValueEventListener valueEventListener = new ValueEventListener() {
@@ -75,9 +78,17 @@ public class NotifyIntentService extends IntentService {
         public void onDataChange(DataSnapshot dataSnapshot) {
             if (dataSnapshot.exists()) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String message = "Hey, "+currentNumber.substring(currentNumber.length()-10)+" have updated their number to "+newNumber;
                     Users user = snapshot.getValue(Users.class);
-                    sendNotification(user.getMobileNumber());
+                    sendNotification(user.getMobileNumber(),message);
+                    count++;
                 }
+            }
+
+            backCount++;
+
+            if(backCount == allContacts.size()-1){
+                updateSelfProfile();
             }
         }
 
@@ -87,13 +98,7 @@ public class NotifyIntentService extends IntentService {
         }
     };
 
-    private void sendNotification(final String userTag){
-
-        String message = currentNumber+" updated to "+newNumber;
-        if(altNumber != null || !altNumber.isEmpty()){
-            message += "with an alternative number of "+altNumber;
-        }
-
+    private void sendNotification(final String userTag,String message) {
         int SDK_INT = android.os.Build.VERSION.SDK_INT;
         if (SDK_INT > 8) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
@@ -119,7 +124,7 @@ public class NotifyIntentService extends IntentService {
                         + "\"filters\": [{\"field\": \"tag\", \"key\": \"User_ID\", \"relation\": \"=\", \"value\": \"" + userTag + "\"}],"
 
                         + "\"data\": {\"foo\": \"bar\"},"
-                        + "\"contents\": {\"en\": \"" + message +"\"}"
+                        + "\"contents\": {\"en\": \"" + message + "\"}"
                         + "}";
 
 
@@ -152,6 +157,12 @@ public class NotifyIntentService extends IntentService {
         }
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("NOTIFICATIONS").child(userTag);
-        databaseReference.child(currentNumber).setValue(message);
+        String notification = currentNumber.substring(3)+" "+newNumber;
+        databaseReference.child(currentNumber).setValue(notification);
+    }
+
+    private void updateSelfProfile(){
+        String message = String.valueOf(count)+" people know about your new contact detail";
+        NotificationUtils.showUpdatedNotification(message,getApplicationContext());
     }
 }

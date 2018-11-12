@@ -39,21 +39,28 @@ public class CallLogsAdapter extends RecyclerView.Adapter<CallLogsAdapter.Custom
     @Override
     public void onBindViewHolder(@NonNull CustomCallLogsAdapter customCallLogsAdapter, int position) {
         if(callLogsList != null && callLogsList.get(position) != null){
-            customCallLogsAdapter.callerNumberTv.setText(callLogsList.get(position).getCallNumber());
+
+            if(callLogsList.get(position).getSavedName() != null && !callLogsList.get(position).getSavedName().isEmpty()){
+                customCallLogsAdapter.callerNumberTv.setText(callLogsList.get(position).getSavedName());
+            }else{
+                customCallLogsAdapter.callerNumberTv.setText(callLogsList.get(position).getCallNumber());
+            }
             customCallLogsAdapter.callDurationTv.setText(callLogsList.get(position).getCallDuration());
             customCallLogsAdapter.callTimeTv.setText(callLogsList.get(position).getCallDate());
 
             String callType = callLogsList.get(position).getCallType();
             if(callType != null){
-                /*if(callType.equalsIgnoreCase("INCOMING")){
-                    Picasso.get().load(R.drawable.ic_menu_camera).into(customCallLogsAdapter.callTypeIv);
-
+                if(callType.equalsIgnoreCase("INCOMING")){
+                    customCallLogsAdapter.callTypeIv.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_received_black_24dp));
                 }else if(callType.equalsIgnoreCase("MISSED")){
-                    Picasso.get().load(R.drawable.ic_menu_gallery).into(customCallLogsAdapter.callTypeIv);
-                }else{
-                    Picasso.get().load(R.drawable.ic_menu_slideshow).into(customCallLogsAdapter.callTypeIv);
-                }*/
-                customCallLogsAdapter.callTypeIv.setText(callType.substring(0,1));
+                    customCallLogsAdapter.callTypeIv.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_missed_black_24dp));
+                }else if(callType.equalsIgnoreCase("OUTGOING")){
+                    customCallLogsAdapter.callTypeIv.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_call_made_black_24dp));
+                }else if(callType.equalsIgnoreCase("REJECTED")){
+                    customCallLogsAdapter.callTypeIv.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_cancel_black_24dp));
+                }else if(callType.equalsIgnoreCase("BLOCKED")){
+                    customCallLogsAdapter.callTypeIv.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_block_black_24dp));
+                }
             }
         }
     }
@@ -72,7 +79,7 @@ public class CallLogsAdapter extends RecyclerView.Adapter<CallLogsAdapter.Custom
         @BindView(R.id.callTimeTv)
         TextView callTimeTv;
         @BindView(R.id.callTypeIv)
-        TextView callTypeIv;
+        ImageView callTypeIv;
 
         public CustomCallLogsAdapter(@NonNull View itemView) {
             super(itemView);

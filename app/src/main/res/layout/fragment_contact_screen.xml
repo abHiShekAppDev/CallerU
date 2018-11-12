@@ -4,7 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".fragments.ContactScreen">
+    tools:context=".fragments.ContactScreen"
+    android:background="@color/white">
+
+   <ProgressBar
+       android:id="@+id/progressBar"
+       android:layout_width="@dimen/x32"
+       android:layout_height="@dimen/x32"
+       android:layout_gravity="center_horizontal"
+       android:layout_marginTop="@dimen/x12"/>
 
    <android.support.v7.widget.RecyclerView
        android:id="@+id/recyclerViewAtContactScreen"

@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.developer.abhishek.calleru.R;
 import com.developer.abhishek.calleru.adapters.ContactAdapter;
@@ -21,7 +22,6 @@ import com.developer.abhishek.calleru.models.Contacts;
 import com.developer.abhishek.calleru.viewModels.ContactsVM;
 
 import java.util.List;
-import java.util.Observable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,6 +30,8 @@ public class ContactScreen extends Fragment {
 
     @BindView(R.id.recyclerViewAtContactScreen)
     RecyclerView recyclerView;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
 
     private List<Contacts> contactsList;
 
@@ -50,6 +52,7 @@ public class ContactScreen extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        progressBar.setVisibility(View.VISIBLE);
         loadContacts();
 
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerView ,
@@ -64,8 +67,8 @@ public class ContactScreen extends Fragment {
     }
 
     private void loadContacts(){
-        ContactsVM contactsVM = ViewModelProviders.of(this).get(ContactsVM.class);
-        contactsVM.getListLiveData().observe(this, new Observer<List<Contacts>>() {
+        ContactsVM contactsVM = ViewModelProviders.of(getActivity()).get(ContactsVM.class);
+        contactsVM.getListLiveData().observe(getActivity(), new Observer<List<Contacts>>() {
             @Override
             public void onChanged(@Nullable List<Contacts> contacts) {
                 if(contacts != null){
@@ -77,6 +80,7 @@ public class ContactScreen extends Fragment {
     }
 
     private void setContactToRv(){
+        progressBar.setVisibility(View.GONE);
         ContactAdapter contactAdapter = new ContactAdapter(contactsList);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
         recyclerView.setAdapter(contactAdapter);

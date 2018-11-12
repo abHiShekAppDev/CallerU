@@ -26,7 +26,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.CustomSear
     @NonNull
     @Override
     public CustomSearchAdapter onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.serach_list_item, viewGroup, false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.search_list_item, viewGroup, false);
         return new CustomSearchAdapter(view);
     }
 

@@ -32,7 +32,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     @Override
     public void onBindViewHolder(@NonNull CustomNotificationAdapter customNotificationAdapter, int position) {
         if(notificationList.size()>position){
-            customNotificationAdapter.notificationTv.setText(notificationList.get(position));
+            String currentNumber = "+91 "+notificationList.get(position).substring(0,11);
+            String newNumber = "+91 "+notificationList.get(position).substring(11);
+            customNotificationAdapter.currentNumberTv.setText(currentNumber);
+            customNotificationAdapter.newNumberTv.setText(newNumber);
         }
     }
 
@@ -43,8 +46,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     public class CustomNotificationAdapter extends RecyclerView.ViewHolder{
 
-        @BindView(R.id.notificationTv)
-        TextView notificationTv;
+        @BindView(R.id.currenNumberInNoti)
+        TextView currentNumberTv;
+        @BindView(R.id.newNumberInNotif)
+        TextView newNumberTv;
 
         public CustomNotificationAdapter(@NonNull View itemView) {
             super(itemView);

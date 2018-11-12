@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.developer.abhishek.calleru.R;
 import com.developer.abhishek.calleru.adapters.NotificationAdapter;
@@ -30,6 +32,10 @@ public class NotificationScreen extends Fragment {
 
     @BindView(R.id.notificationRv)
     RecyclerView recyclerView;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
+    @BindView(R.id.noNewNotiError)
+    TextView noNewNotifTv;
 
     private List<String> notificationList = new ArrayList<>();
 
@@ -52,6 +58,8 @@ public class NotificationScreen extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        progressBar.setVisibility(View.VISIBLE);
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("NOTIFICATIONS").child(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
         databaseReference.addValueEventListener(valueEventListener);
     }
@@ -65,8 +73,24 @@ public class NotificationScreen extends Fragment {
                     notificationList.add(notification);
                 }
 
-                NotificationAdapter notificationAdapter = new NotificationAdapter(notificationList);
-                recyclerView.setAdapter(notificationAdapter);
+                progressBar.setVisibility(View.GONE);
+
+                if(notificationList == null || notificationList.size() == 0){
+                    noNewNotifTv.setVisibility(View.VISIBLE);
+                }else{
+                    noNewNotifTv.setVisibility(View.GONE);
+
+                    recyclerView.setVisibility(View.VISIBLE);
+                    NotificationAdapter notificationAdapter = new NotificationAdapter(notificationList);
+                    recyclerView.setAdapter(notificationAdapter);
+                }
+            }else{
+                progressBar.setVisibility(View.GONE);
+
+                if(notificationList == null || notificationList.size() == 0){
+                    noNewNotifTv.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
+                }
             }
 
         }

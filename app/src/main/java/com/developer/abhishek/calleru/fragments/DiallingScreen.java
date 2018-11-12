@@ -5,33 +5,26 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.CallLog;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.transition.ChangeScroll;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.developer.abhishek.calleru.HomePage;
 import com.developer.abhishek.calleru.R;
 import com.developer.abhishek.calleru.adapters.CallLogsAdapter;
 import com.developer.abhishek.calleru.listener.RecyclerItemClickListener;
 import com.developer.abhishek.calleru.models.CallLogs;
 import com.developer.abhishek.calleru.viewModels.CallLogVM;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -48,6 +41,8 @@ public class DiallingScreen extends Fragment {
     TextView numView;
     @BindView(R.id.numViewLayout)
     LinearLayout numViewLayout;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
 
     private boolean isToShowDialPad;
     private boolean isToDial = false;
@@ -96,7 +91,7 @@ public class DiallingScreen extends Fragment {
         }else{
             dialPad.setVisibility(View.GONE);
         }
-
+        progressBar.setVisibility(View.VISIBLE);
         loadRecentCallLogs();
 
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerView ,
@@ -123,8 +118,8 @@ public class DiallingScreen extends Fragment {
     }
 
     private void loadRecentCallLogs(){
-        CallLogVM callLogVM = ViewModelProviders.of(this).get(CallLogVM.class);
-        callLogVM.getCallLogs().observe(this, new Observer<List<CallLogs>>() {
+        CallLogVM callLogVM = ViewModelProviders.of(getActivity()).get(CallLogVM.class);
+        callLogVM.getCallLogs().observe(getActivity(), new Observer<List<CallLogs>>() {
             @Override
             public void onChanged(@Nullable List<CallLogs> callLogs) {
                 if(callLogs != null){
@@ -137,6 +132,7 @@ public class DiallingScreen extends Fragment {
 
     private void setCallLogToRv(){
         if(callLogsList != null){
+            progressBar.setVisibility(View.GONE);
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
             CallLogsAdapter callLogsAdapter = new CallLogsAdapter(callLogsList,getContext());
             recyclerView.setAdapter(callLogsAdapter);
@@ -155,9 +151,8 @@ public class DiallingScreen extends Fragment {
             isToDial = true;
             numViewLayout.setVisibility(View.VISIBLE);
         }
-
+        numView.append("1");
         changeInFragment.onDialScreenChange(isToDial,isToShowDialPad,dialledNumber);
-        numView.setText(dialledNumber);
     }
 
     @OnClick(R.id.numTwo)
@@ -174,7 +169,7 @@ public class DiallingScreen extends Fragment {
         }
 
         changeInFragment.onDialScreenChange(isToDial,isToShowDialPad,dialledNumber);
-        numView.setText(dialledNumber);
+        numView.append("2");
     }
 
     @OnClick(R.id.numThree)
@@ -191,7 +186,7 @@ public class DiallingScreen extends Fragment {
         }
 
         changeInFragment.onDialScreenChange(isToDial,isToShowDialPad,dialledNumber);
-        numView.setText(dialledNumber);
+        numView.append("3");
     }
 
     @OnClick(R.id.numFour)
@@ -208,7 +203,7 @@ public class DiallingScreen extends Fragment {
         }
 
         changeInFragment.onDialScreenChange(isToDial,isToShowDialPad,dialledNumber);
-        numView.setText(dialledNumber);
+        numView.append("4");
     }
 
     @OnClick(R.id.numFive)
@@ -225,7 +220,7 @@ public class DiallingScreen extends Fragment {
         }
 
         changeInFragment.onDialScreenChange(isToDial,isToShowDialPad,dialledNumber);
-        numView.setText(dialledNumber);
+        numView.append("5");
     }
 
     @OnClick(R.id.numSix)
@@ -242,7 +237,7 @@ public class DiallingScreen extends Fragment {
         }
 
         changeInFragment.onDialScreenChange(isToDial,isToShowDialPad,dialledNumber);
-        numView.setText(dialledNumber);
+        numView.append("6");
     }
 
     @OnClick(R.id.numSeven)
@@ -259,7 +254,7 @@ public class DiallingScreen extends Fragment {
         }
 
         changeInFragment.onDialScreenChange(isToDial,isToShowDialPad,dialledNumber);
-        numView.setText(dialledNumber);
+        numView.append("7");
     }
 
     @OnClick(R.id.numEight)
@@ -276,7 +271,7 @@ public class DiallingScreen extends Fragment {
         }
 
         changeInFragment.onDialScreenChange(isToDial,isToShowDialPad,dialledNumber);
-        numView.setText(dialledNumber);
+        numView.append("8");
     }
 
     @OnClick(R.id.numNine)
@@ -293,7 +288,7 @@ public class DiallingScreen extends Fragment {
         }
 
         changeInFragment.onDialScreenChange(isToDial,isToShowDialPad,dialledNumber);
-        numView.setText(dialledNumber);
+        numView.append("9");
     }
 
     @OnClick(R.id.numZero)
@@ -310,7 +305,7 @@ public class DiallingScreen extends Fragment {
         }
 
         changeInFragment.onDialScreenChange(isToDial,isToShowDialPad,dialledNumber);
-        numView.setText(dialledNumber);
+        numView.append("0");
     }
 
     @OnClick(R.id.numHash)
@@ -327,7 +322,7 @@ public class DiallingScreen extends Fragment {
         }
 
         changeInFragment.onDialScreenChange(isToDial,isToShowDialPad,dialledNumber);
-        numView.setText(dialledNumber);
+        numView.append("#");
     }
 
     @OnClick(R.id.numStar)
@@ -344,18 +339,21 @@ public class DiallingScreen extends Fragment {
         }
 
         changeInFragment.onDialScreenChange(isToDial,isToShowDialPad,dialledNumber);
-        numView.setText(dialledNumber);
+        numView.append("*");
     }
 
     @OnClick(R.id.clearLastNumBtn)
     void clearLastNum(){
-        if(dialledNumber != null && dialledNumber.length() != 0){
+        if(dialledNumber != null && dialledNumber.length() > 1){
             dialledNumber = dialledNumber.substring(0,dialledNumber.length()-1);
+        }else if(dialledNumber != null && dialledNumber.length() == 1){
+            dialledNumber = "";
         }
 
         if(dialledNumber == null || dialledNumber.isEmpty() || dialledNumber.length() == 0){
             isToDial = false;
             numViewLayout.setVisibility(View.GONE);
+            numView.setText("");
         }else{
             numView.setText(dialledNumber);
         }

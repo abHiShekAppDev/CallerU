@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.DiallingScreen">
+    tools:context=".fragments.DiallingScreen"
+    android:background="@color/white">
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="@dimen/x32"
+        android:layout_height="@dimen/x32"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/x12"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerViewAtDialScreen"
@@ -13,5 +21,6 @@
     <include layout="@layout/calling_dial_pad"
         android:layout_gravity="bottom"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/x220"/>
-</FrameLayout>
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>

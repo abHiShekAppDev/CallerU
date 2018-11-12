@@ -6,8 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,8 +49,12 @@ public class LoginPage extends AppCompatActivity {
     EditText verifyCodeEt;
     @BindView(R.id.nameEt)
     EditText nameEt;
+    @BindView(R.id.nextBtn)
+    Button nextBtn;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
 
-   private String mobileNumber;
+    private String mobileNumber;
     private String verificationCode;
     private String name;
     private int currentStep = 1;
@@ -79,15 +85,18 @@ public class LoginPage extends AppCompatActivity {
             }
 
             if(mobileNumber.length() == 13){
+                progressBar.setVisibility(View.VISIBLE);
                 verificationCallBacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                     @Override
                     public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+                        progressBar.setVisibility(View.GONE);
                        startActivity(new Intent(LoginPage.this,HomePage.class));
                        finish();
                     }
 
                     @Override
                     public void onVerificationFailed(FirebaseException e) {
+                        progressBar.setVisibility(View.GONE);
                         if (e instanceof FirebaseTooManyRequestsException) {
                             Toast.makeText(LoginPage.this, "Too many request !! please try again later ...", Toast.LENGTH_SHORT).show();
                         } else if (e instanceof FirebaseAuthInvalidCredentialsException) {
@@ -102,20 +111,25 @@ public class LoginPage extends AppCompatActivity {
                     @Override
                     public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                         super.onCodeSent(s, forceResendingToken);
+                        progressBar.setVisibility(View.GONE);
                         phoneVerificationId = s;
                         currentStep++;
                         mobileNoLayout.setVisibility(View.GONE);
                         verifyCodeLayout.setVisibility(View.VISIBLE);
                         infoText.setText("Enter the code Received");
+                        nextBtn.setText("Next");
+
                     }
                 };
                 PhoneAuthProvider.getInstance().verifyPhoneNumber(mobileNumber, 60, TimeUnit.SECONDS, LoginPage.this, verificationCallBacks);
             }else{
                 Toast.makeText(LoginPage.this,"Enter valid Mobile Number !!!",Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
             }
         }else if(currentStep == 2){
             verificationCode = verifyCodeEt.getText().toString().trim();
             if(verificationCode.length() == 6){
+                progressBar.setVisibility(View.VISIBLE);
                 FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
                 PhoneAuthCredential credential = PhoneAuthProvider.getCredential(phoneVerificationId, verificationCode);
                 firebaseAuth.signInWithCredential(credential).addOnCompleteListener(LoginPage.this, new OnCompleteListener<AuthResult>() {
@@ -124,32 +138,40 @@ public class LoginPage extends AppCompatActivity {
                         if(task.isSuccessful()){
                             currentStep++;
                             infoText.setText("Enter your Name");
+                            nextBtn.setText("Done");
                             nameLayout.setVisibility(View.VISIBLE);
                             verifyCodeLayout.setVisibility(View.GONE);
+                            progressBar.setVisibility(View.GONE);
                         }
                     }
                 }).addOnFailureListener(LoginPage.this, new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(LoginPage.this, "Please Enter valid code ...", Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.GONE);
                     }
                 });
             }else{
                 Toast.makeText(LoginPage.this,"Enter valid Code !!!",Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
             }
 
         }else if(currentStep == 3){
             currentStep++;
             name = nameEt.getText().toString().trim();
-            if(name != null){
+            if(name != null && !name.isEmpty()){
+                progressBar.setVisibility(View.VISIBLE);
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("USERS").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
                 databaseReference.child("Name").setValue(name);
                 databaseReference.child("MobileNumber").setValue(mobileNumber);
                 databaseReference.child("Id").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
+                progressBar.setVisibility(View.GONE);
                 startActivity(new Intent(LoginPage.this,HomePage.class));
                 finish();
+            }else{
+                Toast.makeText(LoginPage.this,"Enter your name",Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -159,16 +181,11 @@ public class LoginPage extends AppCompatActivity {
     public void onBackPressed() {
         if(currentStep == 1){
             super.onBackPressed();
-        }else if(currentStep == 2){
-            currentStep--;
-            verifyCodeLayout.setVisibility(View.GONE);
-            mobileNoLayout.setVisibility(View.VISIBLE);
-            infoText.setText("Enter the Mobile Number");
-        }else if(currentStep == 3){
+        }else {
             currentStep--;
             nameLayout.setVisibility(View.GONE);
             mobileNoLayout.setVisibility(View.VISIBLE);
-            infoText.setText("Enter the Mobile Number");
+            infoText.setText("Enter Your Mobile Number");
         }
     }
 }

@@ -8,12 +8,14 @@ public class CallLogs {
     private String callNumber;
     private String callDuration;
     private String callDate;
+    private String savedName;
 
-    public CallLogs(String callType, String callNumber, String callDuration, String callDate) {
+    public CallLogs(String callType, String callNumber, String callDuration, String callDate, String savedName) {
         this.callType = callType;
         this.callNumber = callNumber;
         this.callDuration = callDuration;
         this.callDate = callDate;
+        this.savedName = savedName;
     }
 
     public String getCallType() {
@@ -30,5 +32,9 @@ public class CallLogs {
 
     public String getCallDate() {
         return callDate;
+    }
+
+    public String getSavedName() {
+        return savedName;
     }
 }

@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.provider.CallLog;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
@@ -20,68 +21,14 @@ public class CallLogsRepo {
 
     private MutableLiveData<List<CallLogs>> callLogsMutableLiveData = new MutableLiveData<>();
     private List<CallLogs> callLogsList = new ArrayList<>();
+    private Context context;
 
     public MutableLiveData<List<CallLogs>> getCallLogsMutableLiveData(Context context) {
-
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
-            return null;
-        }
-        Cursor cursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, null, null, null, CallLog.Calls.DATE + " DESC");
-
-        int number = cursor.getColumnIndex(CallLog.Calls.NUMBER);
-        int type = cursor.getColumnIndex(CallLog.Calls.TYPE);
-        int date = cursor.getColumnIndex(CallLog.Calls.DATE);
-        int duration = cursor.getColumnIndex(CallLog.Calls.DURATION);
-
-        while (cursor.moveToNext()){
-            int callTypeCode = Integer.parseInt(cursor.getString(type));
-            String callDateStr = cursor.getString(date);
-
-            String callNumber = cursor.getString(number);
-
-            String callType = null;
-            switch(callTypeCode) {
-                case CallLog.Calls.OUTGOING_TYPE:
-                    callType = "OUTGOING";
-                    break;
-
-                case CallLog.Calls.INCOMING_TYPE:
-                    callType = "INCOMING";
-                    break;
-
-                case CallLog.Calls.MISSED_TYPE:
-                    callType = "MISSED";
-                    break;
-
-                case CallLog.Calls.REJECTED_TYPE:
-                    callType = "REJECTED";
-                    break;
-
-                case CallLog.Calls.BLOCKED_TYPE:
-                    callType = "BLOCKED";
-                    break;
-
-                default:
-                    callType = "UNKNOWN";
-            }
-
-            removePreviousDuplication(callType,callNumber);
-
-            Date callDate = new Date(Long.valueOf(callDateStr));
-            String callTime = formatDate(callDate);
-
-            String callDuration = formatCallDuration(Integer.parseInt(cursor.getString(duration)));
-
-            callLogsList.add(new CallLogs(callType,callNumber,callDuration,callTime));
-        }
-        cursor.close();
-        callLogsMutableLiveData.setValue(callLogsList);
-
+        this.context = context;
+        new BackgroundTask().execute();
         return callLogsMutableLiveData;
     }
 
-
-    //  Formatting call logs to display in Recycler view
     private String formatDate(Date date){
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         String callTime = String.valueOf(formatter.format(date));
@@ -150,5 +97,73 @@ public class CallLogsRepo {
         }
 
         return callDuration;
+    }
+
+    class BackgroundTask extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
+                return null;
+            }
+            Cursor cursor = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, null, null, null, CallLog.Calls.DATE + " DESC");
+
+            int number = cursor.getColumnIndex(CallLog.Calls.NUMBER);
+            int type = cursor.getColumnIndex(CallLog.Calls.TYPE);
+            int date = cursor.getColumnIndex(CallLog.Calls.DATE);
+            int duration = cursor.getColumnIndex(CallLog.Calls.DURATION);
+            int name = cursor.getColumnIndex(CallLog.Calls.CACHED_NAME);
+
+            while (cursor.moveToNext()){
+                int callTypeCode = Integer.parseInt(cursor.getString(type));
+                String callDateStr = cursor.getString(date);
+
+                String callNumber = cursor.getString(number);
+                String savedName = cursor.getString(name);
+
+                String callType = null;
+                switch(callTypeCode) {
+                    case CallLog.Calls.OUTGOING_TYPE:
+                        callType = "OUTGOING";
+                        break;
+
+                    case CallLog.Calls.INCOMING_TYPE:
+                        callType = "INCOMING";
+                        break;
+
+                    case CallLog.Calls.MISSED_TYPE:
+                        callType = "MISSED";
+                        break;
+
+                    case CallLog.Calls.REJECTED_TYPE:
+                        callType = "REJECTED";
+                        break;
+
+                    case CallLog.Calls.BLOCKED_TYPE:
+                        callType = "BLOCKED";
+                        break;
+
+                    default:
+                        callType = "UNKNOWN";
+                }
+
+                removePreviousDuplication(callType,callNumber);
+
+                Date callDate = new Date(Long.valueOf(callDateStr));
+                String callTime = formatDate(callDate);
+
+                String callDuration = formatCallDuration(Integer.parseInt(cursor.getString(duration)));
+
+                callLogsList.add(new CallLogs(callType,callNumber,callDuration,callTime,savedName));
+            }
+            cursor.close();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            callLogsMutableLiveData.setValue(callLogsList);
+        }
     }
 }

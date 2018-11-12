@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.developer.abhishek.calleru.background.NotifyIntentService;
 import com.developer.abhishek.calleru.models.Contacts;
+import com.developer.abhishek.calleru.utils.NotificationUtils;
 import com.developer.abhishek.calleru.viewModels.ContactsVM;
 import com.google.firebase.auth.FirebaseAuth;
 import com.onesignal.OneSignal;
@@ -39,17 +40,12 @@ public class UpdatePage extends AppCompatActivity {
 
     @BindView(R.id.newNumberTv)
     TextView newNumberTv;
-    @BindView(R.id.altNumberTv)
-    TextView alternativeNumberTv;
     @BindView(R.id.nextBtnAtUpdate)
     ImageButton nextBtn;
 
     private int currentStep = 1;
     private String newNumber = "";
     private String currentNumber;
-    private String altNumber = "";
-
-    //
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,16 +65,16 @@ public class UpdatePage extends AppCompatActivity {
     @OnClick(R.id.nextBtnAtUpdate)
     void next(){
         if(currentStep == 1){
-            if(!newNumber.isEmpty()){
+            if(!newNumber.isEmpty() && newNumber.length() == 10){
                 currentStep++;
-               // Picasso.get().load(R.drawable.ic_menu_slideshow).into(nextBtn);
-                nextBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_slideshow));
+                newNumberTv.setText("Update to\n"+newNumber);
+                nextBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_done_black_24dp));
+            }else{
+                Toast.makeText(UpdatePage.this,"Enter valid number !!!",Toast.LENGTH_SHORT).show();
             }
 
         }else{
             if(!newNumber.isEmpty()){
-                Toast.makeText(UpdatePage.this,"Done",Toast.LENGTH_SHORT).show();
-
                 ContactsVM contactsVM = ViewModelProviders.of(this).get(ContactsVM.class);
                 contactsVM.getAllContactListLiveData().observe(this, new Observer<ArrayList<String>>() {
                     @Override
@@ -87,10 +83,11 @@ public class UpdatePage extends AppCompatActivity {
                             Intent intent = new Intent(UpdatePage.this,NotifyIntentService.class);
                             intent.setAction(NotifyIntentService.ACTION_NOTIFY_OTHER_USER);
                             intent.putExtra(NotifyIntentService.NEW_NUMBER_PASS_INTENT,newNumber);
-                            intent.putExtra(NotifyIntentService.ALT_NUMBER_PASS_INTENT,altNumber);
                             intent.putExtra(NotifyIntentService.CURRENT_NUMBER_PASS_INTENT,currentNumber);
                             intent.putStringArrayListExtra(NotifyIntentService.ALL_CONTACT_PASS_INTENT,strings);
                             startService(intent);
+                            currentStep = 1;
+                            onBackPressed();
                         }
                     }
                 });
@@ -99,19 +96,6 @@ public class UpdatePage extends AppCompatActivity {
         }
     }
 
-    @OnClick(R.id.newNumberTv)
-    void setCursorOnNewNumberTv(){
-        currentStep = 1;
-       // Picasso.get().load(R.drawable.ic_menu_camera).into(nextBtn);
-        nextBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_camera));
-    }
-
-    @OnClick(R.id.altNumberTv)
-    void setCursorOnAltNumberTv(){
-        currentStep = 2;
-       // Picasso.get().load(R.drawable.ic_menu_slideshow).into(nextBtn);
-        nextBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_slideshow));
-    }
 
     @Override
     public void onBackPressed() {
@@ -119,8 +103,8 @@ public class UpdatePage extends AppCompatActivity {
             super.onBackPressed();
         }else{
             currentStep--;
-            //Picasso.get().load(R.drawable.ic_menu_camera).into(nextBtn);
-            nextBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_menu_camera));
+            newNumberTv.setText(newNumber);
+            nextBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_forward_color_24dp));
         }
 
     }
@@ -130,9 +114,6 @@ public class UpdatePage extends AppCompatActivity {
         if(currentStep == 1){
             newNumber += "1";
             newNumberTv.append("1");
-        }else{
-            altNumber += "1";
-            alternativeNumberTv.append("1");
         }
     }
 
@@ -141,9 +122,6 @@ public class UpdatePage extends AppCompatActivity {
         if(currentStep == 1){
             newNumber += "2";
             newNumberTv.append("2");
-        }else{
-            altNumber += "2";
-            alternativeNumberTv.append("2");
         }
     }
 
@@ -152,9 +130,6 @@ public class UpdatePage extends AppCompatActivity {
         if(currentStep == 1){
             newNumber += "3";
             newNumberTv.append("3");
-        }else{
-            altNumber += "3";
-            alternativeNumberTv.append("3");
         }
     }
 
@@ -163,9 +138,6 @@ public class UpdatePage extends AppCompatActivity {
         if(currentStep == 1){
             newNumber += "4";
             newNumberTv.append("4");
-        }else{
-            altNumber += "4";
-            alternativeNumberTv.append("4");
         }
     }
 
@@ -174,9 +146,6 @@ public class UpdatePage extends AppCompatActivity {
         if(currentStep == 1){
             newNumber += "5";
             newNumberTv.append("5");
-        }else{
-            altNumber += "5";
-            alternativeNumberTv.append("5");
         }
     }
 
@@ -185,9 +154,6 @@ public class UpdatePage extends AppCompatActivity {
         if(currentStep == 1){
             newNumber += "6";
             newNumberTv.append("6");
-        }else{
-            altNumber += "6";
-            alternativeNumberTv.append("6");
         }
     }
 
@@ -196,9 +162,6 @@ public class UpdatePage extends AppCompatActivity {
         if(currentStep == 1){
             newNumber += "7";
             newNumberTv.append("7");
-        }else{
-            altNumber += "7";
-            alternativeNumberTv.append("7");
         }
     }
 
@@ -207,9 +170,6 @@ public class UpdatePage extends AppCompatActivity {
         if(currentStep == 1){
             newNumber += "8";
             newNumberTv.append("8");
-        }else{
-            altNumber += "8";
-            alternativeNumberTv.append("8");
         }
     }
 
@@ -218,9 +178,6 @@ public class UpdatePage extends AppCompatActivity {
         if(currentStep == 1){
             newNumber += "9";
             newNumberTv.append("9");
-        }else{
-            altNumber += "9";
-            alternativeNumberTv.append("9");
         }
     }
 
@@ -229,9 +186,6 @@ public class UpdatePage extends AppCompatActivity {
         if(currentStep == 1){
             newNumber += "0";
             newNumberTv.append("0");
-        }else{
-            altNumber += "0";
-            alternativeNumberTv.append("0");
         }
     }
 
@@ -240,9 +194,6 @@ public class UpdatePage extends AppCompatActivity {
         if(currentStep == 1){
             newNumber += "00";
             newNumberTv.append("00");
-        }else{
-            altNumber += "00";
-            alternativeNumberTv.append("00");
         }
     }
 
@@ -252,11 +203,6 @@ public class UpdatePage extends AppCompatActivity {
             if(newNumber.length() != 0){
                 newNumber = newNumber.substring(0,newNumber.length()-1);
                 newNumberTv.setText(newNumber);
-            }
-        }else{
-            if(altNumber.length() != 0){
-                altNumber = altNumber.substring(0,altNumber.length()-1);
-                alternativeNumberTv.setText(altNumber);
             }
         }
     }

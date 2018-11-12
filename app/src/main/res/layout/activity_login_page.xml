@@ -3,70 +3,140 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginPage">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".LoginPage"
+    android:background="@color/white">
 
-    <TextView
-        android:id="@+id/displayInfoTv"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Enter your Mobile Number"
-        android:textAlignment="center"/>
+        android:layout_height="@dimen/x256"
+        android:background="@drawable/toolbar_gradient_background"/>
 
-    <LinearLayout
-        android:id="@+id/mobileNoLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerInParent="true">
-
-        <EditText
-            android:id="@+id/mobileNoEt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/x16"
-            android:layout_marginRight="@dimen/x16"
-            android:hint="+91 XXXXXXXXXX"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/verifyCodeLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:layout_centerInParent="true">
-
-        <EditText
-            android:id="@+id/verificationCodeEt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/x16"
-            android:layout_marginRight="@dimen/x16"
-            android:hint="XXXXXX"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/nameLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:layout_centerInParent="true">
-
-        <EditText
-            android:id="@+id/nameEt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/x16"
-            android:layout_marginRight="@dimen/x16"
-            android:hint="First and Last Name"/>
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/nextBtn"
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/x48"
-        android:text="Send Code"
-        android:layout_alignParentBottom="true"/>
+        android:layout_height="@dimen/x340"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/x48"
+        android:layout_marginLeft="@dimen/x16"
+        android:layout_marginRight="@dimen/x16"
+        app:cardElevation="@dimen/x8">
 
+       <RelativeLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent">
+
+           <TextView
+               android:id="@+id/displayInfoTv"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="@string/enterNumber"
+               android:textSize="@dimen/xs22"
+               android:fontFamily="sans-serif"
+               android:textColor="@color/black"
+               android:layout_marginTop="@dimen/x16"
+               android:paddingLeft="@dimen/x16"
+               android:singleLine="false"/>
+
+           <ProgressBar
+               android:id="@+id/progressBar"
+               android:layout_width="@dimen/x32"
+               android:layout_height="@dimen/x32"
+               android:layout_centerHorizontal="true"
+               android:layout_below="@id/displayInfoTv"
+               android:layout_marginTop="@dimen/x16"
+               android:visibility="gone"/>
+
+           <LinearLayout
+               android:id="@+id/mobileNoLayout"
+               android:layout_width="match_parent"
+               android:layout_height="@dimen/x56"
+               android:orientation="vertical"
+               android:layout_above="@id/nextBtn"
+               android:layout_marginBottom="@dimen/x32"
+               android:layout_marginLeft="@dimen/x32"
+               android:layout_marginRight="@dimen/x32">
+
+               <EditText
+                   android:id="@+id/mobileNoEt"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:hint="@string/numberHint"
+                   android:background="@color/lightWhite"
+                   android:paddingLeft="@dimen/x16"
+                   android:textColorHint="@color/lightBlack"
+                   android:singleLine="true"
+                   android:textColor="@color/black"
+                   android:textSize="@dimen/xs16"
+                   android:fontFamily="sans-serif-smallcaps"
+                   android:textAllCaps="false"/>
+           </LinearLayout>
+
+           <LinearLayout
+               android:id="@+id/verifyCodeLayout"
+               android:layout_width="match_parent"
+               android:layout_height="@dimen/x56"
+               android:orientation="vertical"
+               android:layout_above="@id/nextBtn"
+               android:layout_marginBottom="@dimen/x32"
+               android:layout_marginLeft="@dimen/x32"
+               android:layout_marginRight="@dimen/x32"
+               android:visibility="gone">
+
+               <EditText
+                   android:id="@+id/verificationCodeEt"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:hint="@string/codeHint"
+                   android:background="@color/lightWhite"
+                   android:paddingLeft="@dimen/x16"
+                   android:textColorHint="@color/lightBlack"
+                   android:singleLine="true"
+                   android:textColor="@color/black"
+                   android:textSize="@dimen/xs16"
+                   android:fontFamily="sans-serif-smallcaps"
+                   android:textAllCaps="false"/>
+           </LinearLayout>
+
+           <LinearLayout
+               android:id="@+id/nameLayout"
+               android:layout_width="match_parent"
+               android:layout_height="@dimen/x56"
+               android:orientation="vertical"
+               android:layout_above="@id/nextBtn"
+               android:layout_marginBottom="@dimen/x32"
+               android:layout_marginLeft="@dimen/x32"
+               android:layout_marginRight="@dimen/x32"
+               android:visibility="gone">
+
+               <EditText
+                   android:id="@+id/nameEt"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:hint="@string/nameHint"
+                   android:background="@color/lightWhite"
+                   android:paddingLeft="@dimen/x16"
+                   android:textColorHint="@color/lightBlack"
+                   android:singleLine="true"
+                   android:textColor="@color/black"
+                   android:textSize="@dimen/xs16"
+                   android:fontFamily="sans-serif-smallcaps"
+                   android:textAllCaps="false"/>
+           </LinearLayout>
+
+           <Button
+               android:id="@+id/nextBtn"
+               android:layout_width="match_parent"
+               android:layout_height="@dimen/x56"
+               android:text="@string/sendCode"
+               android:layout_alignParentBottom="true"
+               android:background="@drawable/toolbar_gradient_background"
+               android:textColor="@color/white"
+               android:fontFamily="sans-serif-condensed"
+               android:textSize="@dimen/xs16"
+               android:textAllCaps="false"
+               android:layout_marginBottom="@dimen/x8"
+               android:layout_marginRight="@dimen/x16"
+               android:layout_marginLeft="@dimen/x16"/>
+       </RelativeLayout>
+    </android.support.v7.widget.CardView>
 </RelativeLayout>

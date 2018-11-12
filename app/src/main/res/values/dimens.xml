@@ -27,8 +27,9 @@
     <dimen name="x24">24dp</dimen>
     <dimen name="x32">32dp</dimen>
     <dimen name="x48">48dp</dimen>
-    <dimen name="x55">55dp</dimen>
+    <dimen name="x56">56dp</dimen>
     <dimen name="x64">64dp</dimen>
+    <dimen name="x74">74dp</dimen>
     <dimen name="x100">100dp</dimen>
     <dimen name="x128">128dp</dimen>
     <dimen name="x176">176dp</dimen>

@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.developer.abhishek.calleru.fragments.ContactScreen;
@@ -25,6 +26,7 @@ import com.developer.abhishek.calleru.fragments.DiallingScreen;
 import com.developer.abhishek.calleru.fragments.NotificationScreen;
 import com.developer.abhishek.calleru.fragments.SearchScreen;
 import com.developer.abhishek.calleru.fragments.UpdateScreen;
+import com.google.firebase.auth.FirebaseAuth;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,10 +41,11 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     NavigationView navigationView;
     @BindView(R.id.bottomNavViewAtHP)
     BottomNavigationView bottomNavigationView;
+    private TextView headerTextView;
 
     private static final int MAKE_CALL_PERMISSION_REQUEST_CODE = 1;
 
-    private boolean isToShowDialPad = true;
+    private boolean isToShowDialPad = false;
     private boolean isToDial = false;
     private String dialledNumber = null;
 
@@ -53,7 +56,10 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
 
         ButterKnife.bind(this);
 
+      //  headerTextView = findViewById(R.id.headerTv);
+
         setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         if (checkPermission(android.Manifest.permission.CALL_PHONE)) {
 
         } else {
@@ -67,9 +73,11 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavViewListener);
         navigationView.setNavigationItemSelectedListener(this);
 
-        DiallingScreen diallingScreen = new DiallingScreen();
-        diallingScreen.setToShowDialPad(isToShowDialPad);
-        getSupportFragmentManager().beginTransaction().add(R.id.contentFLAtHP,diallingScreen).commit();
+        String myNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+
+       // headerTextView.setText(myNumber.substring(0,4)+" "+myNumber.substring(5));
+
+        getSupportFragmentManager().beginTransaction().add(R.id.contentFLAtHP,new UpdateScreen()).commit();
     }
 
     @Override
@@ -106,7 +114,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                 case R.id.bottomNavContacts:
                     // Resetting DialPad Screen
                     isToDial = false;
-                    isToShowDialPad = false;
+                    isToShowDialPad = true;
                     dialledNumber = null;
 
                     getSupportFragmentManager().beginTransaction().replace(R.id.contentFLAtHP,new ContactScreen()).commit();
@@ -115,7 +123,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                 case R.id.bottomNavSearch:
                     // Resetting DialPad Screen
                     isToDial = false;
-                    isToShowDialPad = false;
+                    isToShowDialPad = true;
                     dialledNumber = null;
 
                     getSupportFragmentManager().beginTransaction().replace(R.id.contentFLAtHP,new SearchScreen()).commit();
@@ -124,7 +132,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                 case R.id.bottomNavUpdate:
                     // Resetting DialPad Screen
                     isToDial = false;
-                    isToShowDialPad = false;
+                    isToShowDialPad = true;
                     dialledNumber = null;
 
                     getSupportFragmentManager().beginTransaction().replace(R.id.contentFLAtHP,new UpdateScreen()).commit();
@@ -133,7 +141,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                 case R.id.bottomNavNotification:
                     // Resetting DialPad Screen
                     isToDial = false;
-                    isToShowDialPad = false;
+                    isToShowDialPad = true;
                     dialledNumber = null;
 
                     getSupportFragmentManager().beginTransaction().replace(R.id.contentFLAtHP,new NotificationScreen()).commit();
@@ -151,18 +159,22 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_home) {
+            isToDial = false;
+            isToShowDialPad = true;
+            dialledNumber = null;
 
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
+            getSupportFragmentManager().beginTransaction().replace(R.id.contentFLAtHP,new UpdateScreen()).commit();
+        } else if (id == R.id.nav_rate) {
+                rateApp();
         } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+                shareApp();
+        } else if (id == R.id.nav_Exit) {
+            finish();
+        } else if (id == R.id.nav_logout) {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(HomePage.this,LoginPage.class));
+            finish();
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -190,6 +202,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         this.isToDial = isToDial;
         this.dialledNumber = dialledNumber;
         Menu menu = bottomNavigationView.getMenu();
+        MenuItem menuItem = menu.findItem(R.id.dialPad);
         if(isToDial){
             //            menu.findItem(R.id.dialPad).setTitle("Call Now");
             Log.d("Dial : ","true");
@@ -197,5 +210,13 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
             //            menu.findItem(R.id.dialPad).setTitle("Dial");
             Log.d("Dial : ","false");
         }
+    }
+
+    public void rateApp(){
+
+    }
+
+    public void shareApp(){
+
     }
 }

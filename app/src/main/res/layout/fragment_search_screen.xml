@@ -3,38 +3,68 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.SearchScreen">
+    tools:context=".fragments.SearchScreen"
+    android:background="@color/white">
 
-    <EditText
-        android:id="@+id/searchEt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/search_layout"
-        android:ems="10"
-        android:hint="Search here"
-        android:inputType="textPersonName"
-        android:paddingBottom="10dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:paddingTop="10dp"
-        android:textColor="#999999"
-        android:textSize="16sp" />
-
-    <ImageButton
-        android:id="@+id/searchBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:background="@android:color/background_light"
-        android:src="@drawable/search_button"
-        android:scaleType="center" />
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/x128"
+        android:background="@color/colorPrimary"
+        android:id="@+id/searchLayout">
+        <EditText
+            android:id="@+id/searchEt"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/x48"
+            android:hint="@string/searchHint"
+            android:textColorHint="@color/lightBlack"
+            android:textColor="@color/black"
+            android:inputType="textPersonName"
+            android:layout_marginLeft="@dimen/x32"
+            android:layout_marginRight="@dimen/x32"
+            android:singleLine="true"
+            android:gravity="center_vertical"
+            android:layout_marginTop="@dimen/x32"
+            android:background="@color/white"
+            android:paddingLeft="@dimen/x8"/>
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/searchRv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/searchEt"
-        android:layout_marginTop="50dp"/>
+        android:layout_below="@id/searchLayout"/>
 
+    <TextView
+        android:id="@+id/noNewNotiError"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/noContactsFound"
+        android:textColor="@color/lightBlack"
+        android:textStyle="italic"
+        android:fontFamily="cursive"
+        android:textSize="@dimen/xs16"
+        android:visibility="gone"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="@dimen/x74"
+        android:layout_height="@dimen/x74"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/x8"
+        android:visibility="gone"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/searchBtn"
+        android:layout_width="@dimen/x56"
+        android:layout_height="@dimen/x56"
+        android:src="@drawable/ic_search_white_24dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/x16"
+        android:elevation="@dimen/x2"
+        android:stateListAnimator="@animator/floating_press_anim"
+        android:backgroundTint="@color/colorAccent" />
 </RelativeLayout>
