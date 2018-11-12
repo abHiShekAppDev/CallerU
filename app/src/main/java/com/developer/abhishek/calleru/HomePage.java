@@ -1,25 +1,18 @@
 package com.developer.abhishek.calleru;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.developer.abhishek.calleru.fragments.ContactScreen;
 import com.developer.abhishek.calleru.fragments.DiallingScreen;
@@ -33,6 +26,8 @@ import butterknife.ButterKnife;
 
 public class HomePage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DiallingScreen.changeInFragment {
 
+    private static final String CURRENT_FRAG_CODE_SAVED_KEY = "current_fragment";
+
     @BindView(R.id.toolbarAtHP)
     Toolbar toolbar;
     @BindView(R.id.drawerLayout)
@@ -41,13 +36,16 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     NavigationView navigationView;
     @BindView(R.id.bottomNavViewAtHP)
     BottomNavigationView bottomNavigationView;
-    private TextView headerTextView;
-
-    private static final int MAKE_CALL_PERMISSION_REQUEST_CODE = 1;
 
     private boolean isToShowDialPad = false;
     private boolean isToDial = false;
     private String dialledNumber = null;
+
+    private int currentFragmentCode = 1;    /* 1 = Update Screen
+                                               2 = Search Screen
+                                               3 = Dial Pad Screen
+                                               4 = Contacts Screen
+                                               5 = Notification Screen  */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,28 +54,29 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
 
         ButterKnife.bind(this);
 
-      //  headerTextView = findViewById(R.id.headerTv);
-
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
-        if (checkPermission(android.Manifest.permission.CALL_PHONE)) {
 
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CALL_PHONE}, MAKE_CALL_PERMISSION_REQUEST_CODE);
-        }
-
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigationDrawerOpen, R.string.navigationDrawerClose);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
+        //  TODO -> 3 Change the Hamberger Icon of drawer layout
 
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavViewListener);
         navigationView.setNavigationItemSelectedListener(this);
 
-        String myNumber = FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+        if(savedInstanceState == null){
+            getSupportFragmentManager().beginTransaction().add(R.id.contentFLAtHP,new UpdateScreen()).commit();
+        }else if(savedInstanceState.containsKey(CURRENT_FRAG_CODE_SAVED_KEY)){
+            currentFragmentCode = savedInstanceState.getInt(CURRENT_FRAG_CODE_SAVED_KEY);
+        }
+    }
 
-       // headerTextView.setText(myNumber.substring(0,4)+" "+myNumber.substring(5));
-
-        getSupportFragmentManager().beginTransaction().add(R.id.contentFLAtHP,new UpdateScreen()).commit();
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(CURRENT_FRAG_CODE_SAVED_KEY,currentFragmentCode);
     }
 
     @Override
@@ -89,13 +88,36 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         }
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.nav_home) {
+            resetDialPad();
+            getSupportFragmentManager().beginTransaction().replace(R.id.contentFLAtHP,new UpdateScreen()).commit();
+        } else if (id == R.id.nav_rate) {
+            rateApp();
+        } else if (id == R.id.nav_share) {
+            shareApp();
+        } else if (id == R.id.nav_Exit) {
+            finish();
+        } else if (id == R.id.nav_logout) {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(HomePage.this,LoginPage.class));
+            finish();
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
     private BottomNavigationView.OnNavigationItemSelectedListener bottomNavViewListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.bottomNavDial:
-                    if (isToDial && dialledNumber != null && !dialledNumber.isEmpty() && checkPermission(Manifest.permission.CALL_PHONE)) {
+                    if (isToDial && dialledNumber != null && !dialledNumber.isEmpty()) {
                         String dial = "tel:" + dialledNumber;
                         startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
                     }else{
@@ -109,107 +131,75 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                         diallingScreen.setToShowDialPad(isToShowDialPad);
                         getSupportFragmentManager().beginTransaction().replace(R.id.contentFLAtHP,diallingScreen).commit();
                     }
+                    currentFragmentCode = 1;
                     break;
 
                 case R.id.bottomNavContacts:
-                    // Resetting DialPad Screen
-                    isToDial = false;
-                    isToShowDialPad = true;
-                    dialledNumber = null;
-
-                    getSupportFragmentManager().beginTransaction().replace(R.id.contentFLAtHP,new ContactScreen()).commit();
+                    if(currentFragmentCode != 4){
+                        if(currentFragmentCode == 3){
+                            resetDialPad();
+                        }
+                        getSupportFragmentManager().beginTransaction().replace(R.id.contentFLAtHP,new ContactScreen()).commit();
+                        currentFragmentCode = 4;
+                    }
                     break;
 
                 case R.id.bottomNavSearch:
-                    // Resetting DialPad Screen
-                    isToDial = false;
-                    isToShowDialPad = true;
-                    dialledNumber = null;
-
-                    getSupportFragmentManager().beginTransaction().replace(R.id.contentFLAtHP,new SearchScreen()).commit();
+                    if(currentFragmentCode != 2){
+                        if(currentFragmentCode == 3){
+                            resetDialPad();
+                        }
+                        getSupportFragmentManager().beginTransaction().replace(R.id.contentFLAtHP,new SearchScreen()).commit();
+                        currentFragmentCode = 2;
+                    }
                     break;
 
                 case R.id.bottomNavUpdate:
-                    // Resetting DialPad Screen
-                    isToDial = false;
-                    isToShowDialPad = true;
-                    dialledNumber = null;
-
-                    getSupportFragmentManager().beginTransaction().replace(R.id.contentFLAtHP,new UpdateScreen()).commit();
+                    if(currentFragmentCode != 1){
+                        if(currentFragmentCode == 3){
+                            resetDialPad();
+                        }
+                        getSupportFragmentManager().beginTransaction().replace(R.id.contentFLAtHP,new UpdateScreen()).commit();
+                        currentFragmentCode = 1;
+                    }
                     break;
 
                 case R.id.bottomNavNotification:
-                    // Resetting DialPad Screen
-                    isToDial = false;
-                    isToShowDialPad = true;
-                    dialledNumber = null;
-
-                    getSupportFragmentManager().beginTransaction().replace(R.id.contentFLAtHP,new NotificationScreen()).commit();
+                    if(currentFragmentCode != 5){
+                        if(currentFragmentCode == 3){
+                            resetDialPad();
+                        }
+                        getSupportFragmentManager().beginTransaction().replace(R.id.contentFLAtHP,new NotificationScreen()).commit();
+                        currentFragmentCode = 5;
+                    }
                     break;
-
-
             }
             return true;
         }
 
     };
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.nav_home) {
-            isToDial = false;
-            isToShowDialPad = true;
-            dialledNumber = null;
-
-            getSupportFragmentManager().beginTransaction().replace(R.id.contentFLAtHP,new UpdateScreen()).commit();
-        } else if (id == R.id.nav_rate) {
-                rateApp();
-        } else if (id == R.id.nav_share) {
-                shareApp();
-        } else if (id == R.id.nav_Exit) {
-            finish();
-        } else if (id == R.id.nav_logout) {
-            FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(HomePage.this,LoginPage.class));
-            finish();
-        }
-
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    private boolean checkPermission(String permission) {
-        return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch(requestCode) {
-            case MAKE_CALL_PERMISSION_REQUEST_CODE :
-                if (grantResults.length > 0 && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-
-                }
-                return;
-        }
-    }
-
     @Override
     public void onDialScreenChange(boolean isToDial, boolean isToShowDialPad,String dialledNumber) {
+        if(this.isToDial && !isToDial){
+            //  TODO -> 1 Show the dial pad icon and set the title to DialPad in menu item
+            Menu menu = bottomNavigationView.getMenu();
+            MenuItem menuItem = menu.findItem(R.id.dialPad);
+        }else if(!this.isToDial && isToDial){
+            //  TODO -> 2 Show the call icon and set the title to Call in menu item
+            Menu menu = bottomNavigationView.getMenu();
+            MenuItem menuItem = menu.findItem(R.id.dialPad);
+        }
+
         this.isToShowDialPad = isToShowDialPad;
         this.isToDial = isToDial;
         this.dialledNumber = dialledNumber;
-        Menu menu = bottomNavigationView.getMenu();
-        MenuItem menuItem = menu.findItem(R.id.dialPad);
-        if(isToDial){
-            //            menu.findItem(R.id.dialPad).setTitle("Call Now");
-            Log.d("Dial : ","true");
-        }else{
-            //            menu.findItem(R.id.dialPad).setTitle("Dial");
-            Log.d("Dial : ","false");
-        }
+    }
+
+    private void resetDialPad(){
+        isToDial = false;
+        isToShowDialPad = false;
+        dialledNumber = null;
     }
 
     public void rateApp(){

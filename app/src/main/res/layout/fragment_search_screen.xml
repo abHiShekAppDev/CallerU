@@ -8,7 +8,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/x128"
+        android:layout_height="@dimen/x100"
         android:background="@color/colorPrimary"
         android:id="@+id/searchLayout">
         <EditText
@@ -19,8 +19,8 @@
             android:textColorHint="@color/lightBlack"
             android:textColor="@color/black"
             android:inputType="textPersonName"
-            android:layout_marginLeft="@dimen/x32"
-            android:layout_marginRight="@dimen/x32"
+            android:layout_marginLeft="@dimen/x16"
+            android:layout_marginRight="@dimen/x16"
             android:singleLine="true"
             android:gravity="center_vertical"
             android:layout_marginTop="@dimen/x32"

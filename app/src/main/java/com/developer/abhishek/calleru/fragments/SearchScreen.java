@@ -1,15 +1,15 @@
 package com.developer.abhishek.calleru.fragments;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -47,7 +48,15 @@ public class SearchScreen extends Fragment {
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
 
+    @BindString(R.string.networkError)
+    String networkErr;
+    @BindString(R.string.enterSearchText)
+    String searchTextErr;
+
+    private Toast toast;
+
     private List<Users> usersList = new ArrayList<>();
+
     public SearchScreen() {
         // Required empty public constructor
     }
@@ -87,12 +96,16 @@ public class SearchScreen extends Fragment {
 
         if (searchText != null && !searchText.isEmpty()) {
             searchText = searchText.toLowerCase();
-            progressBar.setVisibility(View.VISIBLE);
-            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("USERS");
-            Query firebaseSearchQuery = databaseReference.orderByChild("Name").startAt(searchText).endAt(searchText + "\uf8ff");
-            firebaseSearchQuery.addValueEventListener(valueEventListener);
+            if(networkStatus()){
+                progressBar.setVisibility(View.VISIBLE);
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("USERS");
+                Query firebaseSearchQuery = databaseReference.orderByChild("Name").startAt(searchText).endAt(searchText + "\uf8ff");
+                firebaseSearchQuery.addValueEventListener(valueEventListener);
+            }else{
+                showError(networkErr);
+            }
         }else{
-            Toast.makeText(getActivity(),"Enter text to search",Toast.LENGTH_SHORT).show();
+            showError(searchTextErr);
         }
     }
 
@@ -119,6 +132,19 @@ public class SearchScreen extends Fragment {
         }
     };
 
+    private boolean networkStatus(){
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        return (connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isAvailable() && connectivityManager.getActiveNetworkInfo().isConnected());
+    }
+
+    private void showError(String message){
+        progressBar.setVisibility(View.GONE);
+        if(toast != null){
+            toast.cancel();
+        }
+        toast = Toast.makeText(getActivity(),message,Toast.LENGTH_SHORT);
+        toast.show();
+    }
 
 
 }

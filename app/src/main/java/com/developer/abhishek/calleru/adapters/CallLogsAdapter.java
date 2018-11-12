@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.developer.abhishek.calleru.R;
 import com.developer.abhishek.calleru.models.CallLogs;
-import com.squareup.picasso.Picasso;
 
 import java.util.Date;
 import java.util.List;

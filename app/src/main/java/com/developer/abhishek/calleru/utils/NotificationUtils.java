@@ -21,9 +21,9 @@ public class NotificationUtils {
     private static final int UPDATED_CONTACT_PENDING_INTENT_ID = 3417;
     private static final String UPDATED_CONTACT_NOTIFICATION_CHANNEL_ID = "update_notification_channel";
 
-    private static final String NOTIFICATION_TITLE_UPDATED = "Successfully updated your contact number";
+    private static final String NOTIFICATION_TITLE_UPDATED = "Successfully updated your contact details";
     private static final String NOTIFICATION_TITLE_UPDATING = "Please wait ...";
-    private static final String NOTIFICATION_MESSAGE_UPDATING = "Updating your contact number";
+    private static final String NOTIFICATION_MESSAGE_UPDATING = "Updating your contact details";
 
     public static void showUpdatedNotification(final String message, final Context context){
         final NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -38,9 +38,10 @@ public class NotificationUtils {
         AsyncTask notifyBackgroundTask = new AsyncTask() {
             @Override
             protected Object doInBackground(Object[] objects) {
-                @SuppressLint("IconColors") NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, UPDATED_CONTACT_NOTIFICATION_CHANNEL_ID)
+                @SuppressLint("IconColors")
+                NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, UPDATED_CONTACT_NOTIFICATION_CHANNEL_ID)
                         .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
-                        .setSmallIcon(R.drawable.ic_swap_vert_black_24dp)
+                        .setSmallIcon(R.drawable.ic_done_black_24dp)
                         .setContentTitle(NOTIFICATION_TITLE_UPDATED)
                         .setContentText(message)
                         .setDefaults(Notification.DEFAULT_VIBRATE)
@@ -87,6 +88,7 @@ public class NotificationUtils {
     }
 
     private static PendingIntent contentIntent(Context context) {
+        //  TODO -> 4 Implement PendingIntent
         Intent startActivityIntent = new Intent(Intent.ACTION_VIEW);
         return PendingIntent.getActivity(context, UPDATED_CONTACT_PENDING_INTENT_ID, startActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }

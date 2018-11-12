@@ -1,6 +1,5 @@
 package com.developer.abhishek.calleru.fragments;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,7 +14,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class UpdateScreen extends Fragment {
-
 
     public UpdateScreen() {
         // Required empty public constructor

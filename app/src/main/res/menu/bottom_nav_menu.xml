@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
     <item
         android:id="@+id/bottomNavUpdate"
         android:icon="@drawable/ic_swap_vert_black_24dp"
         android:title="@string/update"/>
 
     <item
-        android:id="@+id/bottomNavSearch"
-        android:icon="@drawable/ic_search_black_24dp"
-        android:title="@string/search"/>
+        android:id="@+id/bottomNavContacts"
+        android:icon="@drawable/ic_person_black_24dp"
+        android:title="@string/contacts"/>
 
     <item
         android:id="@+id/bottomNavDial"
         android:icon="@drawable/ic_dialpad_black_24dp"
-        android:title="@string/dial"
-        android:checked="true"/>
+        android:title="@string/dial" />
 
     <item
-        android:id="@+id/bottomNavContacts"
-        android:icon="@drawable/ic_person_black_24dp"
-        android:title="@string/contacts"/>
+        android:id="@+id/bottomNavSearch"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:title="@string/search"/>
 
     <item
         android:id="@+id/bottomNavNotification"

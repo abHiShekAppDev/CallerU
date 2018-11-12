@@ -25,7 +25,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="@string/noNewNoti"
+        android:text="@string/noNewNotification"
         android:textColor="@color/lightBlack"
         android:textStyle="italic"
         android:fontFamily="cursive"

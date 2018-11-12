@@ -1,7 +1,10 @@
 package com.developer.abhishek.calleru.fragments;
 
 
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,10 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.developer.abhishek.calleru.R;
 import com.developer.abhishek.calleru.adapters.NotificationAdapter;
-import com.developer.abhishek.calleru.models.Users;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -37,12 +41,16 @@ public class NotificationScreen extends Fragment {
     @BindView(R.id.noNewNotiError)
     TextView noNewNotifTv;
 
+    @BindString(R.string.networkError)
+    String networkErr;
+
     private List<String> notificationList = new ArrayList<>();
+
+    private Toast toast;
 
     public NotificationScreen() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,13 +63,21 @@ public class NotificationScreen extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        if(!networkStatus()){
+            showError(networkErr);
+            progressBar.setVisibility(View.GONE);
+        }
+
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        progressBar.setVisibility(View.VISIBLE);
-
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("NOTIFICATIONS").child(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
         databaseReference.addValueEventListener(valueEventListener);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     ValueEventListener valueEventListener = new ValueEventListener() {
@@ -100,4 +116,18 @@ public class NotificationScreen extends Fragment {
 
         }
     };
+
+    private boolean networkStatus(){
+        ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        return (connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isAvailable() && connectivityManager.getActiveNetworkInfo().isConnected());
+    }
+
+    private void showError(String message){
+        progressBar.setVisibility(View.GONE);
+        if(toast != null){
+            toast.cancel();
+        }
+        toast = Toast.makeText(getActivity(),message,Toast.LENGTH_SHORT);
+        toast.show();
+    }
 }

@@ -2,7 +2,9 @@ package com.developer.abhishek.calleru;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
@@ -23,7 +25,6 @@ import com.developer.abhishek.calleru.utils.NotificationUtils;
 import com.developer.abhishek.calleru.viewModels.ContactsVM;
 import com.google.firebase.auth.FirebaseAuth;
 import com.onesignal.OneSignal;
-import com.squareup.picasso.Picasso;
 
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -32,20 +33,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class UpdatePage extends AppCompatActivity {
 
+    private static final String NUMBER_SAVED_INST_KEY = "saved_number";
+
     @BindView(R.id.newNumberTv)
     TextView newNumberTv;
     @BindView(R.id.nextBtnAtUpdate)
     ImageButton nextBtn;
 
+    @BindString(R.string.enterValidNumber)
+    String enterNumberStr;
+    @BindString(R.string.networkError)
+    String networkErr;
+
     private int currentStep = 1;
     private String newNumber = "";
     private String currentNumber;
+
+    private Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +70,16 @@ public class UpdatePage extends AppCompatActivity {
             finish();
         }
 
-        OneSignal.sendTag("User_ID", currentNumber);
+        if(savedInstanceState != null && savedInstanceState.containsKey(NUMBER_SAVED_INST_KEY)){
+            newNumber = savedInstanceState.getString(NUMBER_SAVED_INST_KEY);
+            newNumberTv.setText(newNumber);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(NUMBER_SAVED_INST_KEY,newNumber);
     }
 
     @OnClick(R.id.nextBtnAtUpdate)
@@ -67,35 +87,37 @@ public class UpdatePage extends AppCompatActivity {
         if(currentStep == 1){
             if(!newNumber.isEmpty() && newNumber.length() == 10){
                 currentStep++;
-                newNumberTv.setText("Update to\n"+newNumber);
+                newNumberTv.setText("Update Your Contact Number To\n"+newNumber);
                 nextBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_done_black_24dp));
             }else{
-                Toast.makeText(UpdatePage.this,"Enter valid number !!!",Toast.LENGTH_SHORT).show();
+                showError(enterNumberStr);
             }
 
         }else{
-            if(!newNumber.isEmpty()){
-                ContactsVM contactsVM = ViewModelProviders.of(this).get(ContactsVM.class);
-                contactsVM.getAllContactListLiveData().observe(this, new Observer<ArrayList<String>>() {
-                    @Override
-                    public void onChanged(@Nullable ArrayList<String> strings) {
-                        if(strings != null){
-                            Intent intent = new Intent(UpdatePage.this,NotifyIntentService.class);
-                            intent.setAction(NotifyIntentService.ACTION_NOTIFY_OTHER_USER);
-                            intent.putExtra(NotifyIntentService.NEW_NUMBER_PASS_INTENT,newNumber);
-                            intent.putExtra(NotifyIntentService.CURRENT_NUMBER_PASS_INTENT,currentNumber);
-                            intent.putStringArrayListExtra(NotifyIntentService.ALL_CONTACT_PASS_INTENT,strings);
-                            startService(intent);
-                            currentStep = 1;
-                            onBackPressed();
+            if(networkStatus()){
+                if(!newNumber.isEmpty()){
+                    ContactsVM contactsVM = ViewModelProviders.of(this).get(ContactsVM.class);
+                    contactsVM.getAllContactListLiveData().observe(this, new Observer<ArrayList<String>>() {
+                        @Override
+                        public void onChanged(@Nullable ArrayList<String> strings) {
+                            if(strings != null){
+                                Intent intent = new Intent(UpdatePage.this,NotifyIntentService.class);
+                                intent.setAction(NotifyIntentService.ACTION_NOTIFY_OTHER_USER);
+                                intent.putExtra(NotifyIntentService.NEW_NUMBER_PASS_INTENT,newNumber);
+                                intent.putExtra(NotifyIntentService.CURRENT_NUMBER_PASS_INTENT,currentNumber);
+                                intent.putStringArrayListExtra(NotifyIntentService.ALL_CONTACT_PASS_INTENT,strings);
+                                startService(intent);
+                                currentStep = 1;
+                                onBackPressed();
+                            }
                         }
-                    }
-                });
-
+                    });
+                }
+            }else {
+                showError(networkErr);
             }
         }
     }
-
 
     @Override
     public void onBackPressed() {
@@ -205,5 +227,18 @@ public class UpdatePage extends AppCompatActivity {
                 newNumberTv.setText(newNumber);
             }
         }
+    }
+
+    private boolean networkStatus(){
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return (connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isAvailable() && connectivityManager.getActiveNetworkInfo().isConnected());
+    }
+
+    private void showError(String message){
+        if(toast != null){
+            toast.cancel();
+        }
+        toast = Toast.makeText(UpdatePage.this,message,Toast.LENGTH_SHORT);
+        toast.show();
     }
 }

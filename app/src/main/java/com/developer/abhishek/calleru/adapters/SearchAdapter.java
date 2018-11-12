@@ -36,7 +36,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.CustomSear
             customSearchAdapter.nameTv.setText(usersList.get(position).getName());
             customSearchAdapter.numberTv.setText(usersList.get(position).getMobileNumber());
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 

@@ -1,20 +1,57 @@
 <resources>
     <string name="app_name">CallerU</string>
     <string name="appDescr">Now update your contact number within 10 sec \n and \nlet your new number know to all the user who is using this App and available in your phonebook directory</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
 
+    <!-- Place the OneSignal Api key and Auth key -->
+    <string name="oneSignalApiKey"></string>
+    <string name="oneSignalAuthKey"></string>
 
+    <!-- Login Page String -->
+    <string name="enterNumber">Enter Your Mobile Number</string>
+    <string name="numberHint">enter number here</string>
+    <string name="enterCode">Enter The Received Code</string>
+    <string name="codeHint">6 digit code</string>
+    <string name="enterName">Enter Your Name</string>
+    <string name="nameHint">First and Last Name</string>
+    <string name="sendCode">Send Code</string>
+    <string name="next">Next</string>
+    <string name="done">Done</string>
+
+    <!-- Home Page String -->
+    <string name="navigationDrawerOpen">Open navigation drawer</string>
+    <string name="navigationDrawerClose">Close navigation drawer</string>
+    <string name="home">Home</string>
+    <string name="signOut">Log out</string>
+    <string name="exit">Exit</string>
+    <string name="rate">Rate</string>
+    <string name="share">Share</string>
     <string name="dial">Dial</string>
     <string name="call">Call</string>
     <string name="search">Search</string>
     <string name="contacts">Contacts</string>
     <string name="notification">Notification</string>
     <string name="update">Update</string>
+
+    <!-- Update page and Screen String -->
+    <string name="updateNow">Update Now</string>
+    <string name="newNumber">Enter your new number</string>
+    <string name="notificationToShow"> people are using this app in your contacts list</string>
+
+    <!-- Search Screen -->
+    <string name="searchHint">Search here by name</string>
+    <string name="enterSearchText">Enter text to search</string>
+
+    <!-- Error String -->
+    <string name="enterValidNumber">Please, Enter valid number !!!</string>
+    <string name="enterValidCode">Please, Enter valid code !!!</string>
+    <string name="allFieldReq">All field required to continue !!!</string>
+    <string name="networkError">Please, Check your internet connection !!!</string>
+    <string name="tryLater">Please, Try later ...</string>
+    <string name="noNewNotification">No New Notification To Show</string>
+    <string name="noContactsFound">No Contacts Found By This Name</string>
+
+    <!--    Dial Pad -->
+    <string name="zero">0</string>
     <string name="one">1</string>
     <string name="two">2</string>
     <string name="three">3</string>
@@ -24,18 +61,7 @@
     <string name="seven">7</string>
     <string name="eight">8</string>
     <string name="nine">9</string>
-    <string name="zero">0</string>
     <string name="star">*</string>
     <string name="hash">#</string>
     <string name="doubleZero">00</string>
-    <string name="updateNow">Update Now</string>
-    <string name="newNumber">Enter your new number</string>
-    <string name="sendCode">Send Code</string>
-    <string name="enterNumber">Enter Your Mobile Number</string>
-    <string name="codeHint">6 digit code</string>
-    <string name="numberHint">your number goes here</string>
-    <string name="nameHint">your name goes here</string>
-    <string name="noNewNoti">No New Notification To Show</string>
-    <string name="noContactsFound">No Contacts Found By This Name</string>
-    <string name="searchHint">Search here by name</string>
 </resources>

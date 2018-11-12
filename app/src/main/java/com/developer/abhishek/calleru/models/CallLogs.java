@@ -1,7 +1,5 @@
 package com.developer.abhishek.calleru.models;
 
-import java.util.Date;
-
 public class CallLogs {
 
     private String callType;
