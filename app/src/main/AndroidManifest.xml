@@ -21,15 +21,18 @@
         <activity
             android:name=".LoginPage"
             android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait" 
             android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".HomePage"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait" 
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".UpdatePage"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" 
+            android:screenOrientation="portrait" />
 
         <service android:name=".background.NotifyIntentService" />
 
@@ -44,6 +47,7 @@
         </receiver>
 
         <activity android:name=".SplashPage"
+            android:screenOrientation="portrait" 
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
