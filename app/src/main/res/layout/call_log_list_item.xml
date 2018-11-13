@@ -21,7 +21,8 @@
                 android:layout_width="@dimen/x22"
                 android:layout_height="@dimen/x22"
                 android:src="@drawable/ic_call_black_24dp"
-                android:layout_alignParentBottom="true"/>
+                android:layout_alignParentBottom="true"
+                android:contentDescription="@string/phoneImage"/>
 
             <ImageView
                 android:id="@+id/callTypeIv"
@@ -29,7 +30,8 @@
                 android:layout_height="@dimen/x12"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/x8"
-                android:layout_alignParentRight="true"/>
+                android:layout_alignParentRight="true"
+                android:contentDescription="@string/callTypeImage"/>
         </RelativeLayout>
 
         <TextView

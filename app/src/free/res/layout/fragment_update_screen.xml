@@ -64,7 +64,8 @@
                 android:layout_alignParentBottom="true"
                 android:text="@string/updateNow"
                 android:layout_marginLeft="@dimen/x12"
-                android:layout_marginRight="@dimen/x12"/>
+                android:layout_marginRight="@dimen/x12"
+                android:contentDescription="@string/updateNow"/>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </RelativeLayout>

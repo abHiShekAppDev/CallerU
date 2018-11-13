@@ -13,6 +13,7 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 
+import com.developer.abhishek.calleru.HomePage;
 import com.developer.abhishek.calleru.R;
 
 public class NotificationUtils {
@@ -88,8 +89,7 @@ public class NotificationUtils {
     }
 
     private static PendingIntent contentIntent(Context context) {
-        //  TODO -> 4 Implement PendingIntent
-        Intent startActivityIntent = new Intent(Intent.ACTION_VIEW);
+        Intent startActivityIntent = new Intent(context, HomePage.class);
         return PendingIntent.getActivity(context, UPDATED_CONTACT_PENDING_INTENT_ID, startActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }

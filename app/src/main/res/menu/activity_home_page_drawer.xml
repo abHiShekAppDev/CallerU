@@ -7,22 +7,27 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home_black_24dp"
-            android:title="@string/home" />
+            android:title="@string/home"
+            android:contentDescription="@string/home"/>
         <item
             android:id="@+id/nav_rate"
             android:icon="@drawable/ic_star_black_24dp"
-            android:title="@string/rate" />
+            android:title="@string/rate"
+            android:contentDescription="@string/rate"/>
         <item
             android:id="@+id/nav_share"
             android:icon="@drawable/ic_menu_share"
-            android:title="@string/share" />
+            android:title="@string/share"
+            android:contentDescription="@string/share"/>
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_block_black_24dp"
-            android:title="@string/signOut" />
+            android:title="@string/signOut"
+            android:contentDescription="@string/signOut"/>
         <item
             android:id="@+id/nav_Exit"
             android:icon="@drawable/ic_exit_to_app_black_24dp"
-            android:title="@string/exit" />
+            android:title="@string/exit"
+            android:contentDescription="@string/exit"/>
     </group>
 </menu>

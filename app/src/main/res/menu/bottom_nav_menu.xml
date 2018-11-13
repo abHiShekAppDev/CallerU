@@ -3,25 +3,30 @@
     <item
         android:id="@+id/bottomNavUpdate"
         android:icon="@drawable/ic_swap_vert_black_24dp"
-        android:title="@string/update"/>
+        android:title="@string/update"
+        android:contentDescription="@string/update"/>
 
     <item
         android:id="@+id/bottomNavContacts"
         android:icon="@drawable/ic_person_black_24dp"
-        android:title="@string/contacts"/>
+        android:title="@string/contacts"
+        android:contentDescription="@string/contacts"/>
 
     <item
         android:id="@+id/bottomNavDial"
         android:icon="@drawable/ic_dialpad_black_24dp"
-        android:title="@string/dial" />
+        android:title="@string/dial"
+        android:contentDescription="@string/dial"/>
 
     <item
         android:id="@+id/bottomNavSearch"
         android:icon="@drawable/ic_search_black_24dp"
-        android:title="@string/search"/>
+        android:title="@string/search"
+        android:contentDescription="@string/search"/>
 
     <item
         android:id="@+id/bottomNavNotification"
         android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/notification" />
+        android:title="@string/notification"
+        android:contentDescription="@string/notification"/>
 </menu>

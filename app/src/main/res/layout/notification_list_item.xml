@@ -28,7 +28,8 @@
             android:layout_width="@dimen/x22"
             android:layout_height="@dimen/x16"
             android:layout_gravity="center"
-            android:src="@drawable/ic_arrow_forward_black_24dp"/>
+            android:src="@drawable/ic_arrow_forward_black_24dp"
+            android:contentDescription="@string/changeTo"/>
 
         <TextView
             android:id="@+id/newNumberInNotif"

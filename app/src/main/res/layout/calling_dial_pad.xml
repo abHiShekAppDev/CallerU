@@ -33,7 +33,8 @@
             android:background="@color/white"
             android:paddingLeft="@dimen/x4"
             android:paddingRight="@dimen/x4"
-            android:layout_marginRight="@dimen/x8"/>
+            android:layout_marginRight="@dimen/x8"
+            android:contentDescription="@string/undo"/>
 
     </LinearLayout>
 
@@ -57,7 +58,8 @@
                 android:textSize="@dimen/xs32"
                 android:background="@color/white"
                 android:fontFamily="sans-serif-condensed"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:contentDescription="@string/one"/>
             <Button
                 android:id="@+id/numTwo"
                 android:layout_width="match_parent"
@@ -67,7 +69,8 @@
                 android:textSize="@dimen/xs32"
                 android:background="@color/white"
                 android:fontFamily="sans-serif-condensed"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:contentDescription="@string/two"/>
             <Button
                 android:id="@+id/numThree"
                 android:layout_width="match_parent"
@@ -77,7 +80,8 @@
                 android:textSize="@dimen/xs32"
                 android:background="@color/white"
                 android:fontFamily="sans-serif-condensed"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:contentDescription="@string/three"/>
         </LinearLayout>
 
         <LinearLayout
@@ -94,7 +98,8 @@
                 android:textSize="@dimen/xs32"
                 android:background="@color/white"
                 android:fontFamily="sans-serif-condensed"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:contentDescription="@string/four"/>
             <Button
                 android:id="@+id/numFive"
                 android:layout_width="match_parent"
@@ -104,7 +109,8 @@
                 android:textSize="@dimen/xs32"
                 android:background="@color/white"
                 android:fontFamily="sans-serif-condensed"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:contentDescription="@string/five"/>
             <Button
                 android:id="@+id/numSix"
                 android:layout_width="match_parent"
@@ -114,7 +120,8 @@
                 android:textSize="@dimen/xs32"
                 android:background="@color/white"
                 android:fontFamily="sans-serif-condensed"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:contentDescription="@string/six"/>
         </LinearLayout>
 
         <LinearLayout
@@ -131,7 +138,8 @@
                 android:textSize="@dimen/xs32"
                 android:background="@color/white"
                 android:fontFamily="sans-serif-condensed"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:contentDescription="@string/seven"/>
             <Button
                 android:id="@+id/numEight"
                 android:layout_width="match_parent"
@@ -141,7 +149,8 @@
                 android:textSize="@dimen/xs32"
                 android:background="@color/white"
                 android:fontFamily="sans-serif-condensed"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:contentDescription="@string/eight"/>
             <Button
                 android:id="@+id/numNine"
                 android:layout_width="match_parent"
@@ -151,7 +160,8 @@
                 android:textSize="@dimen/xs32"
                 android:background="@color/white"
                 android:fontFamily="sans-serif-condensed"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:contentDescription="@string/nine"/>
         </LinearLayout>
 
         <LinearLayout
@@ -168,7 +178,8 @@
                 android:textSize="@dimen/xs32"
                 android:background="@color/white"
                 android:fontFamily="sans-serif-condensed"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:contentDescription="@string/star"/>
             <Button
                 android:id="@+id/numZero"
                 android:layout_width="match_parent"
@@ -178,7 +189,8 @@
                 android:textSize="@dimen/xs32"
                 android:background="@color/white"
                 android:fontFamily="sans-serif-condensed"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:contentDescription="@string/zero"/>
             <Button
                 android:id="@+id/numHash"
                 android:layout_width="match_parent"
@@ -188,7 +200,8 @@
                 android:textSize="@dimen/xs32"
                 android:background="@color/white"
                 android:fontFamily="sans-serif-condensed"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:contentDescription="@string/hash"/>
         </LinearLayout>
 
     </LinearLayout>

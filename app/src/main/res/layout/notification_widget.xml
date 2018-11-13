@@ -28,7 +28,8 @@
             android:layout_height="@dimen/x32"
             android:src="@drawable/ic_swap_vert_color_24dp"
             android:layout_weight="1"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:contentDescription="@string/app_name"/>
 
     </LinearLayout>
 
@@ -58,7 +59,8 @@
             android:layout_width="@dimen/x22"
             android:layout_height="@dimen/x16"
             android:layout_gravity="center"
-            android:src="@drawable/ic_arrow_forward_black_24dp"/>
+            android:src="@drawable/ic_arrow_forward_black_24dp"
+            android:contentDescription="@string/changeTo"/>
 
         <TextView
             android:id="@+id/newNumberInNotif"

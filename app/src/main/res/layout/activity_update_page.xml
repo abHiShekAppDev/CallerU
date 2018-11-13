@@ -28,7 +28,8 @@
         android:layout_margin="@dimen/x16"
         android:elevation="@dimen/x2"
         android:stateListAnimator="@animator/floating_press_anim"
-        android:backgroundTint="@color/white" />
+        android:backgroundTint="@color/white"
+        android:contentDescription="@string/next"/>
 
     <include layout="@layout/update_dial_pad"
         android:layout_height="wrap_content"

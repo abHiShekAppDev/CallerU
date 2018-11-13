@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -33,6 +34,8 @@ import butterknife.OnClick;
 
 public class DiallingScreen extends Fragment {
 
+    private final String RECYCLER_VIEW_SAVED_STATE = "recycler_view_saved_state";
+
     @BindView(R.id.recyclerViewAtDialScreen)
     RecyclerView recyclerView;
     @BindView(R.id.dialPad)
@@ -47,6 +50,8 @@ public class DiallingScreen extends Fragment {
     private boolean isToShowDialPad;
     private boolean isToDial = false;
     private String dialledNumber = null;
+
+    private Parcelable parcelable;
 
     private List<CallLogs> callLogsList;
 
@@ -79,6 +84,9 @@ public class DiallingScreen extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dialling_screen, container, false);
         ButterKnife.bind(this,view);
+        if(savedInstanceState != null && savedInstanceState.containsKey(RECYCLER_VIEW_SAVED_STATE)){
+            parcelable = ((Bundle) savedInstanceState).getParcelable(RECYCLER_VIEW_SAVED_STATE);
+        }
         return view;
     }
 
@@ -117,6 +125,13 @@ public class DiallingScreen extends Fragment {
         });
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(RECYCLER_VIEW_SAVED_STATE,recyclerView.getLayoutManager().onSaveInstanceState());
+    }
+
+
     private void loadRecentCallLogs(){
         CallLogVM callLogVM = ViewModelProviders.of(getActivity()).get(CallLogVM.class);
         callLogVM.getCallLogs().observe(getActivity(), new Observer<List<CallLogs>>() {
@@ -136,6 +151,10 @@ public class DiallingScreen extends Fragment {
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
             CallLogsAdapter callLogsAdapter = new CallLogsAdapter(callLogsList,getContext());
             recyclerView.setAdapter(callLogsAdapter);
+
+            if(parcelable != null){
+                recyclerView.getLayoutManager().onRestoreInstanceState(parcelable);
+            }
         }
     }
 

@@ -4,6 +4,7 @@ package com.developer.abhishek.calleru.fragments;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -34,6 +35,8 @@ import butterknife.ButterKnife;
 
 public class NotificationScreen extends Fragment {
 
+    private final String RECYCLER_VIEW_SAVED_STATE = "recycler_view_saved_state";
+
     @BindView(R.id.notificationRv)
     RecyclerView recyclerView;
     @BindView(R.id.progressBar)
@@ -46,6 +49,7 @@ public class NotificationScreen extends Fragment {
 
     private List<String> notificationList = new ArrayList<>();
 
+    private Parcelable parcelable;
     private Toast toast;
 
     public NotificationScreen() {
@@ -56,6 +60,9 @@ public class NotificationScreen extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notification_screen, container, false);
         ButterKnife.bind(this,view);
+        if(savedInstanceState != null && savedInstanceState.containsKey(RECYCLER_VIEW_SAVED_STATE)){
+            parcelable = ((Bundle) savedInstanceState).getParcelable(RECYCLER_VIEW_SAVED_STATE);
+        }
         return view;
     }
 
@@ -78,6 +85,7 @@ public class NotificationScreen extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putParcelable(RECYCLER_VIEW_SAVED_STATE,recyclerView.getLayoutManager().onSaveInstanceState());
     }
 
     ValueEventListener valueEventListener = new ValueEventListener() {
@@ -99,6 +107,10 @@ public class NotificationScreen extends Fragment {
                     recyclerView.setVisibility(View.VISIBLE);
                     NotificationAdapter notificationAdapter = new NotificationAdapter(notificationList);
                     recyclerView.setAdapter(notificationAdapter);
+
+                    if(parcelable != null){
+                        recyclerView.getLayoutManager().onRestoreInstanceState(parcelable);
+                    }
                 }
             }else{
                 progressBar.setVisibility(View.GONE);

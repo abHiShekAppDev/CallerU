@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -39,6 +41,8 @@ import butterknife.OnClick;
 
 public class SearchScreen extends Fragment {
 
+    private final String RECYCLER_VIEW_SAVED_STATE = "recycler_view_saved_state";
+
     @BindView(R.id.searchRv)
     RecyclerView searchRv;
     @BindView(R.id.searchEt)
@@ -53,6 +57,7 @@ public class SearchScreen extends Fragment {
     @BindString(R.string.enterSearchText)
     String searchTextErr;
 
+    private Parcelable parcelable;
     private Toast toast;
 
     private List<Users> usersList = new ArrayList<>();
@@ -66,7 +71,19 @@ public class SearchScreen extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search_screen, container, false);
         ButterKnife.bind(this,view);
+
+        if(savedInstanceState != null && savedInstanceState.containsKey(RECYCLER_VIEW_SAVED_STATE)){
+            parcelable = ((Bundle) savedInstanceState).getParcelable(RECYCLER_VIEW_SAVED_STATE);
+        }
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(searchRv.getLayoutManager() != null){
+            outState.putParcelable(RECYCLER_VIEW_SAVED_STATE,searchRv.getLayoutManager().onSaveInstanceState());
+        }
     }
 
     @Override
@@ -119,6 +136,9 @@ public class SearchScreen extends Fragment {
                 }
                 SearchAdapter searchAdapter = new SearchAdapter(usersList);
                 searchRv.setAdapter(searchAdapter);
+                if(parcelable != null){
+                    searchRv.getLayoutManager().onRestoreInstanceState(parcelable);
+                }
             }else{
                 noContactsFound.setVisibility(View.VISIBLE);
                 searchRv.setVisibility(View.GONE);

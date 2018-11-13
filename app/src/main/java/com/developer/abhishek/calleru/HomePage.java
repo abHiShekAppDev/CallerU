@@ -26,6 +26,7 @@ import butterknife.ButterKnife;
 
 public class HomePage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DiallingScreen.changeInFragment {
 
+    private final static String PACKAGE_NAME = "com.developer.abhishek.calleru";
     private static final String CURRENT_FRAG_CODE_SAVED_KEY = "current_fragment";
 
     @BindView(R.id.toolbarAtHP)
@@ -62,8 +63,6 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigationDrawerOpen, R.string.navigationDrawerClose);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
-        //  TODO -> 3 Change the Hamberger Icon of drawer layout
 
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavViewListener);
         navigationView.setNavigationItemSelectedListener(this);
@@ -209,11 +208,17 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
 
     }
 
-    public void rateApp(){
-
+    private void rateApp() {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + PACKAGE_NAME)));
     }
 
-    public void shareApp(){
-
+    private void shareApp(){
+        String toBeShare = "*MegaShow*\nFollow the link to download\n\n";
+        toBeShare += Uri.parse("https://play.google.com/store/apps/details?id=" + PACKAGE_NAME);
+        Intent sharingIntent = new Intent();
+        sharingIntent.setAction(Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, toBeShare);
+        startActivity(sharingIntent);
     }
 }

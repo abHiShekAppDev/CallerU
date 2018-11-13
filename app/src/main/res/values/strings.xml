@@ -3,8 +3,8 @@
     <string name="appDescr">Now update your contact number within 10 sec \n and \nlet your new number know to all the user who is using this App and available in your phonebook directory</string>
 
     <!-- Place the OneSignal Api key and Auth key -->
-    <string name="oneSignalApiKey">NTI0MWI4ODctNTc3NS00ZWM2LTljZmItM2NjYWE5OGI3MTA1</string>
-    <string name="oneSignalAppId">f8f84cee-8ede-4e08-aa37-56b12d6ba832</string>
+    <string name="oneSignalApiKey"></string>
+    <string name="oneSignalAppId"></string>
 
     <!-- Login Page String -->
     <string name="enterNumber">Enter Your Mobile Number</string>
@@ -69,4 +69,10 @@
     <string name="doubleZero">00</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+
+    <!-- Content Description -->
+    <string name="phoneImage">Phone Image</string>
+    <string name="callTypeImage">Call Type</string>
+    <string name="undo">undo</string>
+    <string name="changeTo">Change To</string>
 </resources>

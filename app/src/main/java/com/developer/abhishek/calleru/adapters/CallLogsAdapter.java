@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.developer.abhishek.calleru.R;
 import com.developer.abhishek.calleru.models.CallLogs;
 
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
