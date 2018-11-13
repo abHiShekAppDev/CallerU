@@ -193,9 +193,12 @@ public class LoginPage extends AppCompatActivity {
         PhoneAuthProvider.OnVerificationStateChangedCallbacks verificationCallBacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+                currentStep++;
+                infoText.setText(enterNameStr);
+                nextBtn.setText(doneStr);
+                nameLayout.setVisibility(View.VISIBLE)
+                verifyCodeLayout.setVisibility(View.GONE);
                 progressBar.setVisibility(View.GONE);
-                startActivity(new Intent(LoginPage.this,HomePage.class));
-                finish();
             }
 
             @Override
