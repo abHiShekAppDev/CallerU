@@ -20,6 +20,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 public class NotifyIntentService extends IntentService {
@@ -58,7 +59,7 @@ public class NotifyIntentService extends IntentService {
             String action = intent.getAction();
             if (ACTION_NOTIFY_OTHER_USER.equals(action)) {
                 if(newNumber != null && !newNumber.isEmpty() && currentNumber != null && allContacts != null && allContacts.size() > 0){
-                    if(oneSignalAppId != null || oneSignalApiKey != null){
+                    if(oneSignalAppId != null && oneSignalApiKey != null){
                         NotificationUtils.showUpdatingNotification(getApplicationContext());
                         findMyActiveContacts();
                     }
@@ -69,15 +70,14 @@ public class NotifyIntentService extends IntentService {
 
     private void findMyActiveContacts(){
         for(int i=0;i<allContacts.size();i++){
-            if(!allContacts.get(i).equalsIgnoreCase(currentNumber)){
+            String number = allContacts.get(i);
+            if(!number.equalsIgnoreCase(currentNumber)){
                 Query query = FirebaseDatabase.getInstance().getReference("USERS")
                         .orderByChild("MobileNumber")
                         .equalTo(allContacts.get(i));
                 query.addValueEventListener(valueEventListener);
             }
         }
-
-        FirebaseDatabase.getInstance().getReference("USERS").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("MobileNumber").setValue("+91"+newNumber);
     }
 
     ValueEventListener valueEventListener = new ValueEventListener() {
@@ -125,12 +125,12 @@ public class NotifyIntentService extends IntentService {
                 httpURLConnection.setRequestMethod("POST");
 
                 String strJsonBody = "{"
-                        + "\"app_id\": \""+ oneSignalAppId +"\","
+                        + "\"app_id\": \""+oneSignalAppId+"\","
 
                         + "\"filters\": [{\"field\": \"tag\", \"key\": \"User_ID\", \"relation\": \"=\", \"value\": \"" + userTag + "\"}],"
 
                         + "\"data\": {\"foo\": \"bar\"},"
-                        + "\"contents\": {\"en\": \"" + "Hey, "+currentNumber.substring(currentNumber.length()-10)+" have updated their number to "+newNumber + "\"}"
+                        + "\"contents\": {\"en\": \"" + currentNumber.substring(currentNumber.length()-10)+" changes to "+newNumber + "\"}"
                         + "}";
 
 
@@ -162,9 +162,12 @@ public class NotifyIntentService extends IntentService {
             }
         }
 
+        Date date = new Date();
+        long timeMilli = date.getTime();
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("NOTIFICATIONS").child(userTag);
         String notification = currentNumber.substring(3)+" "+newNumber;
-        databaseReference.child(currentNumber).setValue(notification);
+        databaseReference.child(String.valueOf(timeMilli)).setValue(notification);
     }
 
 }

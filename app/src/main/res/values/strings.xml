@@ -3,8 +3,8 @@
     <string name="appDescr">Now update your contact number within 10 sec \n and \nlet your new number know to all the user who is using this App and available in your phonebook directory</string>
 
     <!-- Place the OneSignal Api key and Auth key -->
-    <string name="oneSignalApiKey"></string>
-    <string name="oneSignalAppId"></string>
+    <string name="oneSignalApiKey">NTI0MWI4ODctNTc3NS00ZWM2LTljZmItM2NjYWE5OGI3MTA1</string>
+    <string name="oneSignalAppId">f8f84cee-8ede-4e08-aa37-56b12d6ba832</string>
 
     <!-- Login Page String -->
     <string name="enterNumber">Enter Your Mobile Number</string>
@@ -41,6 +41,9 @@
     <string name="searchHint">Search here by name</string>
     <string name="enterSearchText">Enter text to search</string>
 
+    <string name="wait">Wait, while new notification fetching ...</string>
+    <string name="recentChanges">Recent Changes</string>
+
     <!-- Error String -->
     <string name="enterValidNumber">Please, Enter valid number !!!</string>
     <string name="enterValidCode">Please, Enter valid code !!!</string>
@@ -64,4 +67,6 @@
     <string name="star">*</string>
     <string name="hash">#</string>
     <string name="doubleZero">00</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>

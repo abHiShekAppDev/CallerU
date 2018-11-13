@@ -41,6 +41,8 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     private boolean isToDial = false;
     private String dialledNumber = null;
 
+    private MenuItem menuItem;
+
     private int currentFragmentCode = 1;    /* 1 = Update Screen
                                                2 = Search Screen
                                                3 = Dial Pad Screen
@@ -131,7 +133,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                         diallingScreen.setToShowDialPad(isToShowDialPad);
                         getSupportFragmentManager().beginTransaction().replace(R.id.contentFLAtHP,diallingScreen).commit();
                     }
-                    currentFragmentCode = 1;
+                    currentFragmentCode = 3;
                     break;
 
                 case R.id.bottomNavContacts:
@@ -174,6 +176,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                     }
                     break;
             }
+            menuItem = item;
             return true;
         }
 
@@ -182,13 +185,13 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     @Override
     public void onDialScreenChange(boolean isToDial, boolean isToShowDialPad,String dialledNumber) {
         if(this.isToDial && !isToDial){
-            //  TODO -> 1 Show the dial pad icon and set the title to DialPad in menu item
-            Menu menu = bottomNavigationView.getMenu();
-            MenuItem menuItem = menu.findItem(R.id.dialPad);
+            if(menuItem != null && menuItem.getItemId() == R.id.bottomNavDial){
+                    menuItem.setIcon(getResources().getDrawable(R.drawable.ic_dialpad_black_24dp));
+            }
         }else if(!this.isToDial && isToDial){
-            //  TODO -> 2 Show the call icon and set the title to Call in menu item
-            Menu menu = bottomNavigationView.getMenu();
-            MenuItem menuItem = menu.findItem(R.id.dialPad);
+            if(menuItem != null && menuItem.getItemId() == R.id.bottomNavDial){
+                menuItem.setIcon(getResources().getDrawable(R.drawable.ic_call_black_24dp));
+            }
         }
 
         this.isToShowDialPad = isToShowDialPad;
@@ -200,6 +203,10 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         isToDial = false;
         isToShowDialPad = false;
         dialledNumber = null;
+        if(menuItem != null && menuItem.getItemId() == R.id.bottomNavDial){
+            menuItem.setIcon(getResources().getDrawable(R.drawable.ic_dialpad_black_24dp));
+        }
+
     }
 
     public void rateApp(){

@@ -1,4 +1,4 @@
-ext.oneSignalAppId = /* Place your one signal Api Key Here */ 
+ext.oneSignalAppId = /* Place your one signal Api Key Here */ 'f8f84cee-8ede-4e08-aa37-56b12d6ba832'
 
 buildscript {
     repositories {
