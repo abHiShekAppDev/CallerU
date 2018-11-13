@@ -13,8 +13,8 @@ import java.util.List;
 
 public class ContactsVM extends AndroidViewModel{
 
-    private LiveData<List<Contacts>> listLiveData;
-    private LiveData<ArrayList<String>> allContactListLiveData;
+    private final LiveData<List<Contacts>> listLiveData;
+    private final LiveData<ArrayList<String>> allContactListLiveData;
 
     public ContactsVM(@NonNull Application application) {
         super(application);

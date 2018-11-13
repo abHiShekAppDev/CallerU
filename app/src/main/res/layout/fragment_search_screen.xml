@@ -67,5 +67,6 @@
         android:elevation="@dimen/x2"
         android:stateListAnimator="@animator/floating_press_anim"
         android:backgroundTint="@color/colorAccent"
-        android:contentDescription="@string/search"/>
+        android:contentDescription="@string/search"
+        tools:targetApi="lollipop" />
 </RelativeLayout>

@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import com.developer.abhishek.calleru.R;
 import com.developer.abhishek.calleru.models.Users;
 import com.developer.abhishek.calleru.utils.NotificationUtils;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -80,7 +79,7 @@ public class NotifyIntentService extends IntentService {
         }
     }
 
-    ValueEventListener valueEventListener = new ValueEventListener() {
+    final ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             if (dataSnapshot.exists()) {

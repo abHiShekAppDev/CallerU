@@ -5,33 +5,18 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
-import android.os.AsyncTask;
-import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.developer.abhishek.calleru.background.NotifyIntentService;
-import com.developer.abhishek.calleru.models.Contacts;
-import com.developer.abhishek.calleru.utils.NotificationUtils;
 import com.developer.abhishek.calleru.viewModels.ContactsVM;
 import com.google.firebase.auth.FirebaseAuth;
-import com.onesignal.OneSignal;
 
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
 import butterknife.BindString;
 import butterknife.BindView;

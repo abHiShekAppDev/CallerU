@@ -17,7 +17,7 @@ import butterknife.ButterKnife;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.CustomContactAdapter>{
 
-    private List<Contacts> contactsList;
+    private final List<Contacts> contactsList;
 
     public ContactAdapter(List<Contacts> contactsList) {
         this.contactsList = contactsList;

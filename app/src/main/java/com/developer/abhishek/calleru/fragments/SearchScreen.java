@@ -42,6 +42,7 @@ import butterknife.OnClick;
 public class SearchScreen extends Fragment {
 
     private final String RECYCLER_VIEW_SAVED_STATE = "recycler_view_saved_state";
+    private final String SEARCH_LIST_SAVED_INST_KEY = "search_list";
 
     @BindView(R.id.searchRv)
     RecyclerView searchRv;
@@ -60,7 +61,7 @@ public class SearchScreen extends Fragment {
     private Parcelable parcelable;
     private Toast toast;
 
-    private List<Users> usersList = new ArrayList<>();
+    private ArrayList<Users> usersList = new ArrayList<>();
 
     public SearchScreen() {
         // Required empty public constructor
@@ -72,8 +73,22 @@ public class SearchScreen extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search_screen, container, false);
         ButterKnife.bind(this,view);
 
-        if(savedInstanceState != null && savedInstanceState.containsKey(RECYCLER_VIEW_SAVED_STATE)){
-            parcelable = ((Bundle) savedInstanceState).getParcelable(RECYCLER_VIEW_SAVED_STATE);
+        if(savedInstanceState != null){
+            if(savedInstanceState.containsKey(RECYCLER_VIEW_SAVED_STATE)){
+                parcelable = ((Bundle) savedInstanceState).getParcelable(RECYCLER_VIEW_SAVED_STATE);
+            }
+            if(savedInstanceState.containsKey(SEARCH_LIST_SAVED_INST_KEY)){
+                usersList= savedInstanceState.getParcelableArrayList(SEARCH_LIST_SAVED_INST_KEY);
+                if(usersList != null && usersList.size()>0){
+                    searchRv.setHasFixedSize(true);
+                    searchRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    SearchAdapter searchAdapter = new SearchAdapter(usersList);
+                    searchRv.setAdapter(searchAdapter);
+                    if(parcelable != null){
+                        searchRv.getLayoutManager().onRestoreInstanceState(parcelable);
+                    }
+                }
+            }
         }
         return view;
     }
@@ -83,6 +98,7 @@ public class SearchScreen extends Fragment {
         super.onSaveInstanceState(outState);
         if(searchRv.getLayoutManager() != null){
             outState.putParcelable(RECYCLER_VIEW_SAVED_STATE,searchRv.getLayoutManager().onSaveInstanceState());
+            outState.putParcelableArrayList(SEARCH_LIST_SAVED_INST_KEY,usersList);
         }
     }
 
@@ -126,7 +142,7 @@ public class SearchScreen extends Fragment {
         }
     }
 
-    ValueEventListener valueEventListener = new ValueEventListener() {
+    final ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             if (dataSnapshot.exists()) {
@@ -136,9 +152,6 @@ public class SearchScreen extends Fragment {
                 }
                 SearchAdapter searchAdapter = new SearchAdapter(usersList);
                 searchRv.setAdapter(searchAdapter);
-                if(parcelable != null){
-                    searchRv.getLayoutManager().onRestoreInstanceState(parcelable);
-                }
             }else{
                 noContactsFound.setVisibility(View.VISIBLE);
                 searchRv.setVisibility(View.GONE);

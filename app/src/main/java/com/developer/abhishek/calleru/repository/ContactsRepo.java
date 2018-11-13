@@ -18,15 +18,15 @@ import java.util.Map;
 
 public class ContactsRepo {
 
-    private MutableLiveData<List<Contacts>> contactsMutableLiveData = new MutableLiveData<>();
-    private MutableLiveData<ArrayList<String>> allContactsMutableLiveData = new MutableLiveData<>();
+    private final MutableLiveData<List<Contacts>> contactsMutableLiveData = new MutableLiveData<>();
+    private final MutableLiveData<ArrayList<String>> allContactsMutableLiveData = new MutableLiveData<>();
 
-    private HashMap<String,String> allContactsHM = new HashMap<>();
+    private final HashMap<String,String> allContactsHM = new HashMap<>();
 
-    private List<Contacts> contactWithoutRep = new ArrayList<>();
-    private ArrayList<String> allContactList = new ArrayList<>();
+    private final List<Contacts> contactWithoutRep = new ArrayList<>();
+    private final ArrayList<String> allContactList = new ArrayList<>();
 
-    private Context context;
+    private final Context context;
 
     public ContactsRepo(Context context) {
         this.context = context;

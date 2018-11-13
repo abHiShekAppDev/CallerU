@@ -10,16 +10,17 @@ import android.widget.TextView;
 import com.developer.abhishek.calleru.R;
 import com.developer.abhishek.calleru.models.Users;
 
-import java.util.List;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.CustomSearchAdapter>{
 
-    private List<Users> usersList;
+    private final ArrayList<Users> usersList;
 
-    public SearchAdapter(List<Users> usersList) {
+    public SearchAdapter(ArrayList<Users> usersList) {
         this.usersList = usersList;
     }
 

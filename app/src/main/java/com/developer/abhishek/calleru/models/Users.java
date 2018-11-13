@@ -1,6 +1,9 @@
 package com.developer.abhishek.calleru.models;
 
-public class Users {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Users implements Parcelable {
 
     private String Id;
     private String MobileNumber;
@@ -14,6 +17,24 @@ public class Users {
         MobileNumber = mobileNumber;
         Name = name;
     }
+
+    protected Users(Parcel in) {
+        Id = in.readString();
+        MobileNumber = in.readString();
+        Name = in.readString();
+    }
+
+    public static final Creator<Users> CREATOR = new Creator<Users>() {
+        @Override
+        public Users createFromParcel(Parcel in) {
+            return new Users(in);
+        }
+
+        @Override
+        public Users[] newArray(int size) {
+            return new Users[size];
+        }
+    };
 
     public void setId(String id) {
         Id = id;
@@ -37,5 +58,17 @@ public class Users {
 
     public String getName() {
         return Name;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(Id);
+        parcel.writeString(MobileNumber);
+        parcel.writeString(Name);
     }
 }

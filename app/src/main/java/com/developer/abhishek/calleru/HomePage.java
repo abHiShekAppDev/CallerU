@@ -11,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.developer.abhishek.calleru.fragments.ContactScreen;
@@ -112,7 +111,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         return true;
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener bottomNavViewListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+    private final BottomNavigationView.OnNavigationItemSelectedListener bottomNavViewListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -122,11 +121,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                         String dial = "tel:" + dialledNumber;
                         startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
                     }else{
-                        if(isToShowDialPad){
-                            isToShowDialPad = false;
-                        }else{
-                            isToShowDialPad = true;
-                        }
+                        isToShowDialPad = !isToShowDialPad;
 
                         DiallingScreen diallingScreen = new DiallingScreen();
                         diallingScreen.setToShowDialPad(isToShowDialPad);

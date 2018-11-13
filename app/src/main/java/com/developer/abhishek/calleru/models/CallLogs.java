@@ -2,7 +2,7 @@ package com.developer.abhishek.calleru.models;
 
 public class CallLogs {
 
-    private String callType;
+    private final String callType;
     private String callNumber;
     private String callDuration;
     private String callDate;

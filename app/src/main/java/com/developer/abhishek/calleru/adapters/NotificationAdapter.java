@@ -16,7 +16,7 @@ import butterknife.ButterKnife;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.CustomNotificationAdapter>{
 
-    private List<String> notificationList;
+    private final List<String> notificationList;
 
     public NotificationAdapter(List<String> notificationList) {
         this.notificationList = notificationList;

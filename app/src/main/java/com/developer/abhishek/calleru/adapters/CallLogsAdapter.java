@@ -19,8 +19,8 @@ import butterknife.ButterKnife;
 
 public class CallLogsAdapter extends RecyclerView.Adapter<CallLogsAdapter.CustomCallLogsAdapter>{
 
-    private List<CallLogs> callLogsList;
-    private Context context;
+    private final List<CallLogs> callLogsList;
+    private final Context context;
 
     public CallLogsAdapter(List<CallLogs> callLogsList, Context context) {
         this.callLogsList = callLogsList;

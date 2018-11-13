@@ -19,8 +19,8 @@ import java.util.List;
 
 public class CallLogsRepo {
 
-    private MutableLiveData<List<CallLogs>> callLogsMutableLiveData = new MutableLiveData<>();
-    private List<CallLogs> callLogsList = new ArrayList<>();
+    private final MutableLiveData<List<CallLogs>> callLogsMutableLiveData = new MutableLiveData<>();
+    private final List<CallLogs> callLogsList = new ArrayList<>();
     private Context context;
 
     public MutableLiveData<List<CallLogs>> getCallLogsMutableLiveData(Context context) {

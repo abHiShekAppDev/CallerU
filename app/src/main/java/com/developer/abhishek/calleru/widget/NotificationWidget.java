@@ -45,7 +45,7 @@ public class NotificationWidget extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
-        this.context = context;
+        NotificationWidget.context = context;
         this.appWidgets = appWidgetIds;
         this.appWidgetManager = appWidgetManager;
     }

@@ -47,7 +47,7 @@ public class NotificationScreen extends Fragment {
     @BindString(R.string.networkError)
     String networkErr;
 
-    private List<String> notificationList = new ArrayList<>();
+    private final List<String> notificationList = new ArrayList<>();
 
     private Parcelable parcelable;
     private Toast toast;
@@ -88,7 +88,7 @@ public class NotificationScreen extends Fragment {
         outState.putParcelable(RECYCLER_VIEW_SAVED_STATE,recyclerView.getLayoutManager().onSaveInstanceState());
     }
 
-    ValueEventListener valueEventListener = new ValueEventListener() {
+    final ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             if (dataSnapshot.exists()) {

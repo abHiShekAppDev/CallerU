@@ -2,8 +2,8 @@ package com.developer.abhishek.calleru.models;
 
 public class Contacts {
 
-    private String name;
-    private String number;
+    private final String name;
+    private final String number;
 
     public Contacts(String name, String number) {
         this.name = name;

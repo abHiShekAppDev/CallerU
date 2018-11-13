@@ -29,7 +29,8 @@
         android:elevation="@dimen/x2"
         android:stateListAnimator="@animator/floating_press_anim"
         android:backgroundTint="@color/white"
-        android:contentDescription="@string/next"/>
+        android:contentDescription="@string/next"
+        tools:targetApi="lollipop" />
 
     <include layout="@layout/update_dial_pad"
         android:layout_height="wrap_content"
