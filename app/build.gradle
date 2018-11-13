@@ -20,7 +20,7 @@ android {
         release {
             keyAlias 'key0'
             keyPassword 'CallerU'
-            storeFile file('/home/prince/calleruKey.jks')
+            storeFile file('../calleruKey.jks')
             storePassword 'CallerU'
         }
     }
