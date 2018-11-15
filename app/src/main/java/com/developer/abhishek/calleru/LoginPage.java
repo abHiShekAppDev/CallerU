@@ -114,6 +114,7 @@ public class LoginPage extends AppCompatActivity {
 
         }else if(FirebaseAuth.getInstance().getCurrentUser() != null){
             startActivity(new Intent(LoginPage.this,HomePage.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             finish();
         }
 
@@ -174,9 +175,10 @@ public class LoginPage extends AppCompatActivity {
         if(currentStep == 1){
             super.onBackPressed();
         }else {
-            currentStep--;
+            currentStep = 1;
             nameLayout.setVisibility(View.GONE);
             mobileNoLayout.setVisibility(View.VISIBLE);
+            verifyCodeLayout.setVisibility(View.GONE);
             infoText.setText(enterNumberStr);
             nextBtn.setText(sendCodeStr);
         }
@@ -193,9 +195,26 @@ public class LoginPage extends AppCompatActivity {
         PhoneAuthProvider.OnVerificationStateChangedCallbacks verificationCallBacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-                progressBar.setVisibility(View.GONE);
-                startActivity(new Intent(LoginPage.this,HomePage.class));
-                finish();
+                if(phoneAuthCredential != null){
+                    FirebaseAuth.getInstance().signInWithCredential(phoneAuthCredential).addOnCompleteListener(LoginPage.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if(task.isSuccessful()){
+                                currentStep = 3;
+                                infoText.setText(enterNameStr);
+                                nextBtn.setText(doneStr);
+                                nameLayout.setVisibility(View.VISIBLE);
+                                verifyCodeLayout.setVisibility(View.GONE);
+                                progressBar.setVisibility(View.GONE);
+                            }
+                        }
+                    }).addOnFailureListener(LoginPage.this, new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            showError(e.getMessage());
+                        }
+                    });
+                }
             }
 
             @Override
@@ -239,7 +258,7 @@ public class LoginPage extends AppCompatActivity {
             }).addOnFailureListener(LoginPage.this, new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    showError(enterValidCodeErr);
+                    showError(e.getMessage());
                 }
             });
         }else{
@@ -250,13 +269,14 @@ public class LoginPage extends AppCompatActivity {
     private void handleStepThird(){
         if(name != null && !name.isEmpty()){
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("USERS").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-            databaseReference.child("Name").setValue(name);
+            databaseReference.child("Name").setValue(name.toLowerCase());
             databaseReference.child("MobileNumber").setValue(mobileNumber);
             databaseReference.child("Id").setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
             OneSignal.sendTag("User_ID", mobileNumber);
 
             progressBar.setVisibility(View.GONE);
             startActivity(new Intent(LoginPage.this,HomePage.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             finish();
         }else{
             showError(allFieldReqErr);

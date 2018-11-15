@@ -18,15 +18,15 @@ import java.util.Map;
 
 public class ContactsRepo {
 
-    private final MutableLiveData<List<Contacts>> contactsMutableLiveData = new MutableLiveData<>();
-    private final MutableLiveData<ArrayList<String>> allContactsMutableLiveData = new MutableLiveData<>();
+    private static final MutableLiveData<List<Contacts>> contactsMutableLiveData = new MutableLiveData<>();
+    private static final MutableLiveData<ArrayList<String>> allContactsMutableLiveData = new MutableLiveData<>();
 
-    private final HashMap<String,String> allContactsHM = new HashMap<>();
+    private static final HashMap<String,String> allContactsHM = new HashMap<>();
 
-    private final List<Contacts> contactWithoutRep = new ArrayList<>();
-    private final ArrayList<String> allContactList = new ArrayList<>();
+    private static final List<Contacts> contactWithoutRep = new ArrayList<>();
+    private static final ArrayList<String> allContactList = new ArrayList<>();
 
-    private final Context context;
+    private static Context context;
 
     public ContactsRepo(Context context) {
         this.context = context;
@@ -41,7 +41,7 @@ public class ContactsRepo {
         return allContactsMutableLiveData;
     }
 
-    private void sortListBasedOnAlphabet(List<Contacts> list){
+    private static void sortListBasedOnAlphabet(List<Contacts> list){
         if (list.size() > 0) {
             Collections.sort(list, new Comparator<Contacts>() {
                 @Override
@@ -52,10 +52,13 @@ public class ContactsRepo {
         }
     }
 
-    class BackgroundTask extends AsyncTask<Void,Void,Void>{
+    public static class BackgroundTask extends AsyncTask<Void,Void,Void>{
 
         @Override
         protected Void doInBackground(Void... voids) {
+            allContactsHM.clear();
+            contactWithoutRep.clear();
+            allContactsHM.clear();
             ContentResolver contentResolver = context.getContentResolver();
             Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
 

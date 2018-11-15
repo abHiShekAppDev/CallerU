@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.developer.abhishek.calleru.fragments.ContactScreen;
@@ -42,6 +43,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     private String dialledNumber = null;
 
     private MenuItem menuItem;
+    private Menu menu;
 
     private int currentFragmentCode = 1;    /* 1 = Update Screen
                                                2 = Search Screen
@@ -66,10 +68,15 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavViewListener);
         navigationView.setNavigationItemSelectedListener(this);
 
+        menu = bottomNavigationView.getMenu();
+        menuItem = menu.findItem(R.id.bottomNavDial);
+
         if(savedInstanceState == null){
             getSupportFragmentManager().beginTransaction().add(R.id.contentFLAtHP,new UpdateScreen()).commit();
-        }else if(savedInstanceState.containsKey(CURRENT_FRAG_CODE_SAVED_KEY)){
-            currentFragmentCode = savedInstanceState.getInt(CURRENT_FRAG_CODE_SAVED_KEY);
+        }else {
+            if(savedInstanceState.containsKey(CURRENT_FRAG_CODE_SAVED_KEY)){
+                currentFragmentCode = savedInstanceState.getInt(CURRENT_FRAG_CODE_SAVED_KEY);
+            }
         }
     }
 
@@ -77,6 +84,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(CURRENT_FRAG_CODE_SAVED_KEY,currentFragmentCode);
+
     }
 
     @Override
@@ -170,7 +178,6 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                     }
                     break;
             }
-            menuItem = item;
             return true;
         }
 
@@ -208,12 +215,18 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     }
 
     private void shareApp(){
-        String toBeShare = "*MegaShow*\nFollow the link to download\n\n";
+        String toBeShare = "*CallerU*\nFollow the link to download\n\n";
         toBeShare += Uri.parse("https://play.google.com/store/apps/details?id=" + PACKAGE_NAME);
         Intent sharingIntent = new Intent();
         sharingIntent.setAction(Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, toBeShare);
         startActivity(sharingIntent);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }

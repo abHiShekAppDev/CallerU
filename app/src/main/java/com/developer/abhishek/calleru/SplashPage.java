@@ -42,19 +42,13 @@ public class SplashPage extends AppCompatActivity {
                 if(isPermissionAllow){
                     if(FirebaseAuth.getInstance().getCurrentUser() == null){
                         startActivity(new Intent(SplashPage.this,LoginPage.class));
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                         finish();
                     }else{
                         startActivity(new Intent(SplashPage.this,HomePage.class));
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                         finish();
                     }
-                }else{
-                    AlertDialog.Builder builder = new AlertDialog.Builder(SplashPage.this);
-                    builder.setMessage(getResources().getString(R.string.permissionErr))
-                            .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                   finish();
-                                }
-                            });
                 }
             }
         },3000);
@@ -70,11 +64,21 @@ public class SplashPage extends AppCompatActivity {
                     if(checkPermission(permissions)){
                         if(FirebaseAuth.getInstance().getCurrentUser() == null){
                             startActivity(new Intent(SplashPage.this,LoginPage.class));
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                             finish();
                         }else{
                             startActivity(new Intent(SplashPage.this,HomePage.class));
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                             finish();
                         }
+                    }else{
+                        AlertDialog.Builder builder = new AlertDialog.Builder(SplashPage.this);
+                        builder.setMessage(getResources().getString(R.string.permissionErr))
+                                .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        finish();
+                                    }
+                                }).create().show();
                     }
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(SplashPage.this);
@@ -83,7 +87,7 @@ public class SplashPage extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int id) {
                                     finish();
                                 }
-                            });
+                            }).create().show();
                 }
                 return;
             }

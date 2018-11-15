@@ -24,7 +24,7 @@
         android:layout_height="@dimen/x56"
         android:src="@drawable/ic_arrow_forward_color_24dp"
         android:layout_above="@id/dialPadAtUpdatePage"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_margin="@dimen/x16"
         android:elevation="@dimen/x2"
         android:stateListAnimator="@animator/floating_press_anim"

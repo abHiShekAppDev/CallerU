@@ -13,10 +13,16 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/x12"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerViewAtDialScreen"
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerViewAtDialScreen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <include layout="@layout/calling_dial_pad"
         android:layout_gravity="bottom"

@@ -19,13 +19,14 @@
             android:textColorHint="@color/lightBlack"
             android:textColor="@color/black"
             android:inputType="textPersonName"
-            android:layout_marginLeft="@dimen/x16"
-            android:layout_marginRight="@dimen/x16"
+            android:layout_marginStart="@dimen/x16"
+            android:layout_marginEnd="@dimen/x16"
             android:singleLine="true"
             android:gravity="center_vertical"
             android:layout_marginTop="@dimen/x32"
             android:background="@color/white"
-            android:paddingLeft="@dimen/x8"/>
+            android:paddingStart="@dimen/x8"
+            android:paddingEnd="@dimen/x8"/>
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
@@ -51,7 +52,7 @@
         android:id="@+id/progressBar"
         android:layout_width="@dimen/x74"
         android:layout_height="@dimen/x74"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/x8"
         android:visibility="gone"/>
@@ -62,7 +63,7 @@
         android:layout_height="@dimen/x56"
         android:src="@drawable/ic_search_white_24dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_margin="@dimen/x16"
         android:elevation="@dimen/x2"
         android:stateListAnimator="@animator/floating_press_anim"

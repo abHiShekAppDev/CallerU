@@ -4,7 +4,7 @@
 
     <!-- Place the OneSignal Api key and Auth key -->
     <string name="oneSignalApiKey">NTI0MWI4ODctNTc3NS00ZWM2LTljZmItM2NjYWE5OGI3MTA1</string>
-    <string name="oneSignalAppId">f8f84cee–8ede-4e08-aa37-56b12d6ba832</string>
+    <string name="oneSignalAppId">f8f84cee-8ede-4e08-aa37-56b12d6ba832</string>
 
     <!-- Login Page String -->
     <string name="enterNumber">Enter Your Mobile Number</string>
@@ -31,12 +31,12 @@
     <string name="notification">Notification</string>
     <string name="update">Update</string>
     <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
 
     <!-- Update page and Screen String -->
     <string name="updateNow">Update Now</string>
     <string name="newNumber">Enter your new number</string>
     <string name="notificationToShow"> people are using this app in your contacts list</string>
+    <string name="updateYourNumberTo">Update Your Contact Number To %s</string>
 
     <!-- Search Screen -->
     <string name="searchHint">Search here by name</string>

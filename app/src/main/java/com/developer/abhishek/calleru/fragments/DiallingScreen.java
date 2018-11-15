@@ -11,8 +11,10 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +26,7 @@ import com.developer.abhishek.calleru.R;
 import com.developer.abhishek.calleru.adapters.CallLogsAdapter;
 import com.developer.abhishek.calleru.listener.RecyclerItemClickListener;
 import com.developer.abhishek.calleru.models.CallLogs;
+import com.developer.abhishek.calleru.repository.CallLogsRepo;
 import com.developer.abhishek.calleru.viewModels.CallLogVM;
 
 import java.util.List;
@@ -35,6 +38,10 @@ import butterknife.OnClick;
 public class DiallingScreen extends Fragment {
 
     private final String RECYCLER_VIEW_SAVED_STATE = "recycler_view_saved_state";
+    private final String SWIPE_REFRESH_SAVED_STATE = "swipe_refresh_saved_state";
+    private static final String IS_TO_SHOW_DIAL_PAD = "is_to_dial_pad";
+    private static final String IS_TO_DIAL = "is_to_dial";
+    private static final String DIALLED_NUMBER = "dialled_number";
 
     @BindView(R.id.recyclerViewAtDialScreen)
     RecyclerView recyclerView;
@@ -46,6 +53,8 @@ public class DiallingScreen extends Fragment {
     LinearLayout numViewLayout;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
+    @BindView(R.id.swipeRefresh)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     private boolean isToShowDialPad;
     private boolean isToDial = false;
@@ -54,6 +63,7 @@ public class DiallingScreen extends Fragment {
     private Parcelable parcelable;
 
     private List<CallLogs> callLogsList;
+    private boolean flag = false;
 
     changeInFragment changeInFragment;
 
@@ -69,7 +79,6 @@ public class DiallingScreen extends Fragment {
         isToShowDialPad = toShowDialPad;
     }
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -84,8 +93,28 @@ public class DiallingScreen extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dialling_screen, container, false);
         ButterKnife.bind(this,view);
-        if(savedInstanceState != null && savedInstanceState.containsKey(RECYCLER_VIEW_SAVED_STATE)){
-            parcelable = ((Bundle) savedInstanceState).getParcelable(RECYCLER_VIEW_SAVED_STATE);
+        if(savedInstanceState != null){
+            if(savedInstanceState.containsKey(RECYCLER_VIEW_SAVED_STATE)){
+                flag = true;
+                parcelable = ((Bundle) savedInstanceState).getParcelable(RECYCLER_VIEW_SAVED_STATE);
+            }
+            if(savedInstanceState.containsKey(SWIPE_REFRESH_SAVED_STATE)){
+                swipeRefreshLayout.setRefreshing(savedInstanceState.getBoolean(SWIPE_REFRESH_SAVED_STATE));
+            }
+            if(savedInstanceState.containsKey(IS_TO_DIAL)){
+                isToDial = savedInstanceState.getBoolean(IS_TO_DIAL);
+            }
+            if(savedInstanceState.containsKey(IS_TO_SHOW_DIAL_PAD)){
+                isToShowDialPad = savedInstanceState.getBoolean(IS_TO_SHOW_DIAL_PAD);
+            }
+            if(savedInstanceState.containsKey(DIALLED_NUMBER)){
+                dialledNumber = savedInstanceState.getString(DIALLED_NUMBER);
+                if(dialledNumber != null){
+                    numView.setText(dialledNumber);
+                    numViewLayout.setVisibility(View.VISIBLE);
+                    changeInFragment.onDialScreenChange(isToDial,isToShowDialPad,dialledNumber);
+                }
+            }
         }
         return view;
     }
@@ -123,14 +152,27 @@ public class DiallingScreen extends Fragment {
                 }
             }
         });
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                flag = false;
+                new CallLogsRepo.BackgroundTask().execute();
+            }
+        });
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(RECYCLER_VIEW_SAVED_STATE,recyclerView.getLayoutManager().onSaveInstanceState());
+        outState.putBoolean(SWIPE_REFRESH_SAVED_STATE,swipeRefreshLayout.isRefreshing());
+        outState.putBoolean(IS_TO_SHOW_DIAL_PAD,isToShowDialPad);
+        outState.putBoolean(IS_TO_DIAL,isToDial);
+        if(dialledNumber != null){
+            outState.putString(DIALLED_NUMBER,dialledNumber);
+        }
     }
-
 
     private void loadRecentCallLogs(){
         CallLogVM callLogVM = ViewModelProviders.of(getActivity()).get(CallLogVM.class);
@@ -141,18 +183,23 @@ public class DiallingScreen extends Fragment {
                     callLogsList = callLogs;
                     setCallLogToRv();
                 }
+
+                if(swipeRefreshLayout.isRefreshing()){
+                    swipeRefreshLayout.setRefreshing(false);
+                }
             }
         });
     }
 
-    private void setCallLogToRv(){
+    private void setCallLogToRv() {
         if(callLogsList != null){
             progressBar.setVisibility(View.GONE);
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
             CallLogsAdapter callLogsAdapter = new CallLogsAdapter(callLogsList,getContext());
+            callLogsAdapter.notifyDataSetChanged();
             recyclerView.setAdapter(callLogsAdapter);
 
-            if(parcelable != null){
+            if(parcelable != null && flag){
                 recyclerView.getLayoutManager().onRestoreInstanceState(parcelable);
             }
         }

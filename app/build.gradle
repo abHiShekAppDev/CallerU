@@ -1,4 +1,4 @@
-ext.oneSignalAppId = /* Place your one signal Api Key Here */"f8f84cee–8ede-4e08-aa37-56b12d6ba832"
+ext.oneSignalAppId = /* Place your one signal Api Key Here */"f8f84cee-8ede-4e08-aa37-56b12d6ba832"
 
         buildscript {
             repositories {
@@ -20,7 +20,7 @@ android {
         release {
             keyAlias 'key0'
             keyPassword 'CallerU'
-            storeFile file('/home/prince/calleruKey.jks')
+            storeFile file('calleruKey.jks')
             storePassword 'CallerU'
         }
     }
@@ -42,11 +42,8 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-        debug {
-            signingConfig signingConfigs.release
         }
     }
     flavorDimensions "default"

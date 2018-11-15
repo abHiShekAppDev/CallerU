@@ -14,9 +14,16 @@
        android:layout_gravity="center_horizontal"
        android:layout_marginTop="@dimen/x12"/>
 
-   <android.support.v7.widget.RecyclerView
-       android:id="@+id/recyclerViewAtContactScreen"
+   <android.support.v4.widget.SwipeRefreshLayout
+       xmlns:android="http://schemas.android.com/apk/res/android"
+       android:id="@+id/swipeRefresh"
        android:layout_width="match_parent"
-       android:layout_height="match_parent"/>
+       android:layout_height="match_parent">
+
+      <android.support.v7.widget.RecyclerView
+          android:id="@+id/recyclerViewAtContactScreen"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"/>
+   </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

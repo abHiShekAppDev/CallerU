@@ -19,9 +19,9 @@ import java.util.List;
 
 public class CallLogsRepo {
 
-    private final MutableLiveData<List<CallLogs>> callLogsMutableLiveData = new MutableLiveData<>();
-    private final List<CallLogs> callLogsList = new ArrayList<>();
-    private Context context;
+    private static final MutableLiveData<List<CallLogs>> callLogsMutableLiveData = new MutableLiveData<>();
+    private static final List<CallLogs> callLogsList = new ArrayList<>();
+    private static Context context;
 
     public MutableLiveData<List<CallLogs>> getCallLogsMutableLiveData(Context context) {
         this.context = context;
@@ -29,7 +29,7 @@ public class CallLogsRepo {
         return callLogsMutableLiveData;
     }
 
-    private String formatDate(Date date){
+    private static String formatDate(Date date){
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm");
         String callTime = String.valueOf(formatter.format(date));
         String currentTime = String.valueOf(formatter.format(new Date()));
@@ -61,7 +61,7 @@ public class CallLogsRepo {
         return time;
     }
 
-    private void removePreviousDuplication(String callType, String callNumber){
+    private static void removePreviousDuplication(String callType, String callNumber){
 
         if(callLogsList.size() > 0){
             String previousCallNumber = callLogsList.get(callLogsList.size()-1).getCallNumber();
@@ -83,7 +83,7 @@ public class CallLogsRepo {
         }
     }
 
-    private String formatCallDuration(int callDur){
+    private static String formatCallDuration(int callDur){
         String callDuration = null;
 
         if(callDur == 0){
@@ -99,10 +99,11 @@ public class CallLogsRepo {
         return callDuration;
     }
 
-    class BackgroundTask extends AsyncTask<Void,Void,Void>{
+    public static class BackgroundTask extends AsyncTask<Void,Void,Void>{
 
         @Override
         protected Void doInBackground(Void... voids) {
+            callLogsList.clear();
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
                 return null;
             }

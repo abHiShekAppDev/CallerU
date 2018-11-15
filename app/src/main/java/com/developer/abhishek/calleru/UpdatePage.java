@@ -26,6 +26,7 @@ import butterknife.OnClick;
 public class UpdatePage extends AppCompatActivity {
 
     private static final String NUMBER_SAVED_INST_KEY = "saved_number";
+    private static final String CURRENT_STEP_SAVED_KEY = "current_step";
 
     @BindView(R.id.newNumberTv)
     TextView newNumberTv;
@@ -55,9 +56,23 @@ public class UpdatePage extends AppCompatActivity {
             finish();
         }
 
-        if(savedInstanceState != null && savedInstanceState.containsKey(NUMBER_SAVED_INST_KEY)){
-            newNumber = savedInstanceState.getString(NUMBER_SAVED_INST_KEY);
-            newNumberTv.setText(newNumber);
+        if(savedInstanceState != null){
+            if(savedInstanceState.containsKey(NUMBER_SAVED_INST_KEY)){
+                newNumber = savedInstanceState.getString(NUMBER_SAVED_INST_KEY);
+            }
+            if(savedInstanceState.containsKey(CURRENT_STEP_SAVED_KEY)){
+                currentStep = savedInstanceState.getInt(CURRENT_STEP_SAVED_KEY);
+            }
+
+            if(newNumber != null){
+                if(currentStep == 1){
+                    newNumberTv.setText(newNumber);
+                }else if(currentStep == 2){
+                    String updateStr = String.format(getResources().getString(R.string.updateYourNumberTo), newNumber);
+                    newNumberTv.setText(updateStr);
+                    nextBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_done_black_24dp));
+                }
+            }
         }
     }
 
@@ -65,6 +80,7 @@ public class UpdatePage extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(NUMBER_SAVED_INST_KEY,newNumber);
+        outState.putInt(CURRENT_STEP_SAVED_KEY,currentStep);
     }
 
     @OnClick(R.id.nextBtnAtUpdate)
@@ -72,7 +88,8 @@ public class UpdatePage extends AppCompatActivity {
         if(currentStep == 1){
             if(!newNumber.isEmpty() && newNumber.length() == 10){
                 currentStep++;
-                newNumberTv.setText("Update Your Contact Number To\n"+newNumber);
+                String updateStr = String.format(getResources().getString(R.string.updateYourNumberTo), newNumber);
+                newNumberTv.setText(updateStr);
                 nextBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_done_black_24dp));
             }else{
                 showError(enterNumberStr);
@@ -225,5 +242,11 @@ public class UpdatePage extends AppCompatActivity {
         }
         toast = Toast.makeText(UpdatePage.this,message,Toast.LENGTH_SHORT);
         toast.show();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }

@@ -10,6 +10,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.developer.abhishek.calleru.R;
 import com.developer.abhishek.calleru.adapters.ContactAdapter;
 import com.developer.abhishek.calleru.listener.RecyclerItemClickListener;
 import com.developer.abhishek.calleru.models.Contacts;
+import com.developer.abhishek.calleru.repository.ContactsRepo;
 import com.developer.abhishek.calleru.viewModels.ContactsVM;
 
 import java.util.List;
@@ -31,11 +33,16 @@ import butterknife.ButterKnife;
 public class ContactScreen extends Fragment {
 
     private final String RECYCLER_VIEW_SAVED_STATE = "recycler_view_saved_state";
+    private final String SWIPE_REFRESH_SAVED_STATE = "swipe_refresh_saved_state";
 
     @BindView(R.id.recyclerViewAtContactScreen)
     RecyclerView recyclerView;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
+    @BindView(R.id.swipeRefresh)
+    SwipeRefreshLayout swipeRefreshLayout;
+
+    private boolean flag = false;
 
     private List<Contacts> contactsList;
 
@@ -51,7 +58,11 @@ public class ContactScreen extends Fragment {
         View view = inflater.inflate(R.layout.fragment_contact_screen, container, false);
         ButterKnife.bind(this,view);
         if(savedInstanceState != null && savedInstanceState.containsKey(RECYCLER_VIEW_SAVED_STATE)){
+            flag = true;
             parcelable = ((Bundle) savedInstanceState).getParcelable(RECYCLER_VIEW_SAVED_STATE);
+        }
+        if(savedInstanceState != null && savedInstanceState.containsKey(SWIPE_REFRESH_SAVED_STATE)){
+            swipeRefreshLayout.setRefreshing(savedInstanceState.getBoolean(SWIPE_REFRESH_SAVED_STATE));
         }
         return view;
     }
@@ -72,14 +83,22 @@ public class ContactScreen extends Fragment {
                     }
                 })
         );
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                flag = false;
+                new ContactsRepo.BackgroundTask().execute();
+            }
+        });
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(RECYCLER_VIEW_SAVED_STATE,recyclerView.getLayoutManager().onSaveInstanceState());
+        outState.putBoolean(SWIPE_REFRESH_SAVED_STATE,swipeRefreshLayout.isRefreshing());
     }
-
 
     private void loadContacts(){
         ContactsVM contactsVM = ViewModelProviders.of(getActivity()).get(ContactsVM.class);
@@ -89,6 +108,9 @@ public class ContactScreen extends Fragment {
                 if(contacts != null){
                     contactsList = contacts;
                     setContactToRv();
+                    if(swipeRefreshLayout.isRefreshing()){
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
                 }
             }
         });
@@ -97,9 +119,10 @@ public class ContactScreen extends Fragment {
     private void setContactToRv(){
         progressBar.setVisibility(View.GONE);
         ContactAdapter contactAdapter = new ContactAdapter(contactsList);
+        contactAdapter.notifyDataSetChanged();
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
         recyclerView.setAdapter(contactAdapter);
-        if(parcelable != null){
+        if(parcelable != null && flag){
             recyclerView.getLayoutManager().onRestoreInstanceState(parcelable);
         }
     }

@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "979441834033",
-    "firebase_url": "https://abhishek-calleru.firebaseio.com",
-    "project_id": "abhishek-calleru",
-    "storage_bucket": "abhishek-calleru.appspot.com"
+    "project_number": "273980291645",
+    "firebase_url": "https://calleru-da906.firebaseio.com",
+    "project_id": "calleru-da906",
+    "storage_bucket": "calleru-da906.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:979441834033:android:b93f55ddc7925801",
+        "mobilesdk_app_id": "1:273980291645:android:b93f55ddc7925801",
         "android_client_info": {
           "package_name": "com.developer.abhishek.calleru"
         }
       },
       "oauth_client": [
         {
-          "client_id": "979441834033-k2ildtltc4eoumt768h42npqqou3352k.apps.googleusercontent.com",
+          "client_id": "273980291645-9oehb3gtv7s1pel5kra64f4r0cpfr9ec.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.developer.abhishek.calleru",
@@ -23,13 +23,13 @@
           }
         },
         {
-          "client_id": "979441834033-mgfl94qj516glmo32an0m2dkfpu1qr3d.apps.googleusercontent.com",
+          "client_id": "273980291645-rg6j8brocifmd7f74dadr05ms0bj73ph.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC2DMTeALijya_MJE4xLXupjHVDkY_Zm50"
+          "current_key": "AIzaSyByT4N4sVlg13DoH5WOo9i98J0MmvNWK6U"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "979441834033-mgfl94qj516glmo32an0m2dkfpu1qr3d.apps.googleusercontent.com",
+              "client_id": "273980291645-rg6j8brocifmd7f74dadr05ms0bj73ph.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -52,14 +52,22 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:979441834033:android:fbef9ee87277299e",
+        "mobilesdk_app_id": "1:273980291645:android:fbef9ee87277299e",
         "android_client_info": {
           "package_name": "com.developer.abhishek.calleru.free"
         }
       },
       "oauth_client": [
         {
-          "client_id": "979441834033-7e8aa0eu2u09324v4s6nvsrog8778fha.apps.googleusercontent.com",
+          "client_id": "273980291645-68aimdd3hh74l2i00p0l0in0m6jhk45v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.developer.abhishek.calleru.free",
+            "certificate_hash": "98e5aa05372f824af3a56c87fd89fb0d09266bdc"
+          }
+        },
+        {
+          "client_id": "273980291645-ef9l4n1s8d33n9jg6pqe6opfmlp1m3s9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.developer.abhishek.calleru.free",
@@ -67,13 +75,13 @@
           }
         },
         {
-          "client_id": "979441834033-mgfl94qj516glmo32an0m2dkfpu1qr3d.apps.googleusercontent.com",
+          "client_id": "273980291645-rg6j8brocifmd7f74dadr05ms0bj73ph.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC2DMTeALijya_MJE4xLXupjHVDkY_Zm50"
+          "current_key": "AIzaSyByT4N4sVlg13DoH5WOo9i98J0MmvNWK6U"
         }
       ],
       "services": {
@@ -84,7 +92,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "979441834033-mgfl94qj516glmo32an0m2dkfpu1qr3d.apps.googleusercontent.com",
+              "client_id": "273980291645-rg6j8brocifmd7f74dadr05ms0bj73ph.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -96,14 +104,22 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:979441834033:android:1f81ce10da4f3666",
+        "mobilesdk_app_id": "1:273980291645:android:1f81ce10da4f3666",
         "android_client_info": {
           "package_name": "com.developer.abhishek.calleru.paid"
         }
       },
       "oauth_client": [
         {
-          "client_id": "979441834033-r2uosgl4ktplgvsv84cofpmtr69afaio.apps.googleusercontent.com",
+          "client_id": "273980291645-rq9igd6a8erk6mi3f3897en9s39rsean.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.developer.abhishek.calleru.paid",
+            "certificate_hash": "98e5aa05372f824af3a56c87fd89fb0d09266bdc"
+          }
+        },
+        {
+          "client_id": "273980291645-72681ad8fdgtp6561naq95htn26ot9i0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.developer.abhishek.calleru.paid",
@@ -111,13 +127,13 @@
           }
         },
         {
-          "client_id": "979441834033-mgfl94qj516glmo32an0m2dkfpu1qr3d.apps.googleusercontent.com",
+          "client_id": "273980291645-rg6j8brocifmd7f74dadr05ms0bj73ph.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC2DMTeALijya_MJE4xLXupjHVDkY_Zm50"
+          "current_key": "AIzaSyByT4N4sVlg13DoH5WOo9i98J0MmvNWK6U"
         }
       ],
       "services": {
@@ -128,7 +144,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "979441834033-mgfl94qj516glmo32an0m2dkfpu1qr3d.apps.googleusercontent.com",
+              "client_id": "273980291645-rg6j8brocifmd7f74dadr05ms0bj73ph.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

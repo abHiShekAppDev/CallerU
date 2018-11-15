@@ -8,6 +8,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ import butterknife.ButterKnife;
 public class NotificationScreen extends Fragment {
 
     private final String RECYCLER_VIEW_SAVED_STATE = "recycler_view_saved_state";
+    private final String SWIPE_REFRESH_SAVED_STATE = "swipe_refresh_saved_state";
 
     @BindView(R.id.notificationRv)
     RecyclerView recyclerView;
@@ -43,6 +45,8 @@ public class NotificationScreen extends Fragment {
     ProgressBar progressBar;
     @BindView(R.id.noNewNotiError)
     TextView noNewNotifTv;
+    @BindView(R.id.swipeRefresh)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @BindString(R.string.networkError)
     String networkErr;
@@ -51,6 +55,8 @@ public class NotificationScreen extends Fragment {
 
     private Parcelable parcelable;
     private Toast toast;
+
+    private boolean flag = false;
 
     public NotificationScreen() {
         // Required empty public constructor
@@ -61,7 +67,11 @@ public class NotificationScreen extends Fragment {
         View view = inflater.inflate(R.layout.fragment_notification_screen, container, false);
         ButterKnife.bind(this,view);
         if(savedInstanceState != null && savedInstanceState.containsKey(RECYCLER_VIEW_SAVED_STATE)){
+            flag = true;
             parcelable = ((Bundle) savedInstanceState).getParcelable(RECYCLER_VIEW_SAVED_STATE);
+        }
+        if(savedInstanceState != null && savedInstanceState.containsKey(SWIPE_REFRESH_SAVED_STATE)){
+            swipeRefreshLayout.setRefreshing(savedInstanceState.getBoolean(SWIPE_REFRESH_SAVED_STATE));
         }
         return view;
     }
@@ -78,20 +88,37 @@ public class NotificationScreen extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("NOTIFICATIONS").child(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-        databaseReference.addValueEventListener(valueEventListener);
+        loadNotification();
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                flag = false;
+                loadNotification();
+            }
+        });
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(RECYCLER_VIEW_SAVED_STATE,recyclerView.getLayoutManager().onSaveInstanceState());
+        outState.putBoolean(SWIPE_REFRESH_SAVED_STATE,swipeRefreshLayout.isRefreshing());
+    }
+
+    private void loadNotification(){
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("NOTIFICATIONS").child(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        databaseReference.addValueEventListener(valueEventListener);
     }
 
     final ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             if (dataSnapshot.exists()) {
+                notificationList.clear();
+                if(swipeRefreshLayout.isRefreshing()){
+                    swipeRefreshLayout.setRefreshing(false);
+                }
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     String notification = snapshot.getValue(String.class);
                     notificationList.add(notification);
@@ -108,7 +135,7 @@ public class NotificationScreen extends Fragment {
                     NotificationAdapter notificationAdapter = new NotificationAdapter(notificationList);
                     recyclerView.setAdapter(notificationAdapter);
 
-                    if(parcelable != null){
+                    if(parcelable != null && flag){
                         recyclerView.getLayoutManager().onRestoreInstanceState(parcelable);
                     }
                 }
@@ -118,6 +145,10 @@ public class NotificationScreen extends Fragment {
                 if(notificationList == null || notificationList.size() == 0){
                     noNewNotifTv.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
+                }
+
+                if(swipeRefreshLayout.isRefreshing()){
+                    swipeRefreshLayout.setRefreshing(false);
                 }
             }
 

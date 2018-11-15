@@ -37,6 +37,7 @@ public class UpdateScreen extends Fragment {
     @OnClick(R.id.updateBtn)
     void showUpdateAct(){
         startActivity(new Intent(getActivity(), UpdatePage.class));
+        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
 }

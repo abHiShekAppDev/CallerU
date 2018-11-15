@@ -13,8 +13,8 @@
         android:layout_height="match_parent"
         android:elevation="@dimen/x8"
         app:cardElevation="@dimen/x4"
-        android:layout_marginLeft="@dimen/x22"
-        android:layout_marginRight="@dimen/x22"
+        android:layout_marginStart="@dimen/x22"
+        android:layout_marginEnd="@dimen/x22"
         android:layout_marginBottom="@dimen/x32"
         android:layout_marginTop="@dimen/x64"
         tools:targetApi="lollipop">
@@ -42,13 +42,13 @@
                 android:paddingTop="@dimen/x22"
                 android:paddingBottom="@dimen/x22"
                 android:background="@color/lightWhite"
-                android:paddingLeft="@dimen/x8"
-                android:paddingRight="@dimen/x8"
+                android:paddingStart="@dimen/x8"
+                android:paddingEnd="@dimen/x8"
                 android:textSize="@dimen/xs16"
                 android:layout_marginTop="@dimen/x32"
                 android:layout_below="@id/adView"
-                android:layout_marginLeft="@dimen/x12"
-                android:layout_marginRight="@dimen/x12"/>
+                android:layout_marginStart="@dimen/x12"
+                android:layout_marginEnd="@dimen/x12"/>
 
             <Button
                 android:id="@+id/updateBtn"
@@ -64,8 +64,8 @@
                 android:textAllCaps="false"
                 android:layout_alignParentBottom="true"
                 android:text="@string/updateNow"
-                android:layout_marginLeft="@dimen/x12"
-                android:layout_marginRight="@dimen/x12"
+                android:layout_marginStart="@dimen/x12"
+                android:layout_marginEnd="@dimen/x12"
                 android:contentDescription="@string/updateNow"
                 tools:targetApi="lollipop" />
         </RelativeLayout>
